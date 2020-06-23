@@ -1,6 +1,16 @@
+import nltk
 import praw
-from typing import Tuple, TextIO, List, Any, Dict
-import word_categorizer
+from typing import Tuple, TextIO, List, Dict
+from nltk.corpus import stopwords
+from nltk.probability import FreqDist
+
+NONSENSE_LIST = ['first', 'much', 'other', 'same', 'last',
+                 'sure', 'next', 'i', 'many', 'm',
+                 'u', 'second', 'ur', 'own', 's',
+                 'pretty', 'course', 'of the', 'get', 'year',
+                 'would', 'in the', 'take', 'one', 'really',
+                 'like', 'i\'m', 'courses', 'also', 'you can',
+                 'n\'t', '\'', '*', ]
 
 
 def read_config(config: TextIO) -> Tuple[str, List[str], List[str]]:
@@ -14,162 +24,201 @@ def read_config(config: TextIO) -> Tuple[str, List[str], List[str]]:
 
 
 def comment_forest_to_str_list(comment_forest) -> List[str]:
-    """Convert comment_forest to list of comment in string."""
+    """Convert comment_forest to list of comment in string.
+
+    CommentForest is a class that defined in praw library. It represents all the
+    comments below a post and it is in a form of tree.
+    """
     raw_comments = comment_forest.list()
     string_comments = []
     for comment in raw_comments:
         try:
             string_comments.append(comment.body)
         except AttributeError:
-            string_comments.extend(comment.comments())
+            c = comment.comments()
+            for i in c:
+                string_comments.append(i.body)
     return string_comments
 
 
-class CoursePost:
-    """The class of a single post about a course in a subreddit.
-    """
-    course_code: str
-    subreddit_name: str
-    id: str
-    title: str
-    self_text: str
-    comments: List[str]
-    num_upvotes: int
-    upvote_ratio: float
-
-    def __init__(self, course_code: str, subreddit_name: str, id: str,
-                 title: str, self_text: str, comments: List[str], upvotes: int,
-                 upvote_ratio: float):
-        self.course_code = course_code
-        self.subreddit_name = subreddit_name
-        self.id = id
-        self.title = title
-        self.self_text = self_text
-        self.comments = comments
-        self.num_upvotes = upvotes
-        self.upvote_ratio = upvote_ratio
-
-    def __str__(self) -> str:
-        return ' course: {} \n subreddit: {} \n id: {} \n title: {} \n ' \
-               'text: {} \n comment: {} \n upvotes: {}'.format\
-            (self.course_code, self.subreddit_name, self.id, self.title,
-             self.self_text, self.comments, self.num_upvotes)
-
-    def to_adjectives(self) -> List[str]:
-        """This method utilizes nltk and pick out all the adjective in title,
-        self_text and comments."""
-        adjectives = []
-        adjectives.extend(word_categorizer.to_adjectives(self.title))
-        adjectives.extend(word_categorizer.to_adjectives(self.self_text))
-        for comment in self.comments:
-            adjectives.extend(word_categorizer.to_adjectives(comment))
-        return adjectives
+def convert_one_post_to_strings(post: praw.reddit.models.Submission) -> str:
+    """Extract all text in a post, including title, text and comments,
+    concatenate them into a single str."""
+    title = post.title
+    text = post.selftext
+    comments = comment_forest_to_str_list(post.comments)
+    result = ' '.join(comments)
+    result = result + title
+    result = result + text
+    result = result.lower()
+    return result
 
 
 class CoursePostsComplex:
-    """The class of all the information about a course in a subreddit.
+    """The class contains all the information about a course in a subreddit.
     """
-
     course_code: str
-    subreddit_name: str
-    posts: List[CoursePost]
+    _subreddit: praw.reddit.models.subreddits.Subreddit
+    _posts: List[praw.reddit.models.Submission]
 
-    def __init__(self, course_code: str, subreddit_name: str):
+    def __init__(self, course_code: str,
+                 subreddit: praw.reddit.models.subreddits.Subreddit):
         self.course_code = course_code
-        self.subreddit_name = subreddit_name
-        self.posts = []
+        self._subreddit = subreddit
+        self._posts = []
 
-    def add_post(self, post: CoursePost) -> None:
-        self.posts.append(post)
+    def append(self, post: praw.reddit.Submission) -> None:
+        """Append a post to this complex."""
+        self._posts.append(post)
 
-    def __str__(self) -> str:
-        doc = ''
-        for post in self.posts:
-            doc += '\n\n * * * * * \n\n'
-            doc += str(post)
-        doc += '\n\n ******************************'
-        return doc
+    def convert_to_string(self) -> str:
+        """Extract all the text from posts in <self.posts> and return as a
+        single str."""
+        texts = []
+        for i in self._posts:
+            texts.append(convert_one_post_to_strings(i))
+        return ' '.join(texts)
 
-    def to_adjectives(self) -> List[str]:
-        """This method utilizes nltk and pick out all the adjective in title,
-        self_text and comments of each post."""
-        adjectives = []
-        for post in self.posts:
-            adjectives.extend(post.to_adjectives())
-        return adjectives
+    def get_subreddit_name(self) -> str:
+        return self._subreddit.display_name
 
 
 class RedditReader:
-    """The class that use praw library to gather raw data from reddit.com.
-    """
 
     subreddit_name: str
-    _course_list: List[str]
     _agent: praw.reddit.Reddit
     _subreddit: praw.reddit.models.subreddits.Subreddit
 
-    def __init__(self, subreddit_name: str, course_list: List[str],
-                 agent: List[str]) -> None:
+    def __init__(self, subreddit_name: str, agent: List[str]) -> None:
         """Create a new RedditReader class with the name of subreddit, the list
         of courses, and the agent certification information."""
         self.subreddit_name = subreddit_name
-        self._course_list = course_list.copy()
         self._agent = praw.Reddit(client_id=agent[0],
                                   client_secret=agent[1],
                                   user_agent=agent[2])
         self._subreddit = self._agent.subreddit(subreddit_name)
 
-    def read(self, course_code: str, limit=1000) -> CoursePostsComplex:
+    def read_course(self, course_code: str, limit=100) -> CoursePostsComplex:
         """Search the subreddit with the keyword <course_code>, and convert the
         search result to CoursePostsComplex."""
-        allPosts = CoursePostsComplex(course_code, self.subreddit_name)
+        course_post_complex = CoursePostsComplex(course_code, self._subreddit)
         search_result = list(self._subreddit.search(course_code, limit=limit))
         for post in search_result:
-            comments = comment_forest_to_str_list(post.comments)
-            course_post = CoursePost(course_code, self.subreddit_name, post.id,
-                                     post.title, post.selftext, comments,
-                                     post.score, post.upvote_ratio)
-            allPosts.add_post(course_post)
-        return allPosts
-
-    def read_all(self, limit=1000) -> List[CoursePostsComplex]:
-        """Search the subreddit with all the course codes, and convert all
-        search result to a list of CoursePostsComplex."""
-        posts_complex = []
-        for code in self._course_list:
-            posts_complex.append(self.read(code, limit))
-        return posts_complex
-
-    def to_adjectives(self, limit=1000) -> Dict[str, List[str]]:
-        """This method utilizes nltk and pick out all the adjective in title,
-        self_text and comments of each post of each course."""
-        adjectives = dict()
-        complexs = self.read_all(limit)
-        for posts_complex in complexs:
-            adjectives[posts_complex.course_code] = \
-                posts_complex.to_adjectives()
-        return adjectives
-
-    def adjective_frequency(self, limit=1000) -> Dict[str, Dict[str, int]]:
-        """Sum the frequency of adjectives for each course."""
-        all_adjectives = self.to_adjectives(limit)
-        frequencies = dict()
-        for course in self._course_list:
-            adjectives = all_adjectives[course]
-            frequency = dict()
-            for adjective in adjectives:
-                frequency[adjective] = adjectives.count(adjective)
-            frequencies[course] = frequency
-        return frequencies
+            course_post_complex.append(post)
+        # print("Course " + course_code + " in subreddit " +
+        #       self._subreddit.display_name + " has been successfully read.")
+        return course_post_complex
 
 
-reader = RedditReader('UofT', ['MAT235', 'MAT237', 'MAT257',
-                               'ECO200', 'ECO204', 'ECO206'],
-                      ['QCoNFSH3HMntdQ','Wp0hdaBna71vtZ6SDqEgFUGczzk','Test'])
-frequency = reader.adjective_frequency(limit=500)
-for i in frequency:
-    print(i)
-    print(word_categorizer.top_adjectives(frequency[i], 50))
-    print('\n\n')
+class WordFrequencyGenerator:
+    """This class is a usage class which contains several methods of handling
+    string data and convert them to frequency.
+    """
+
+    _keyword: str
+
+    def __init__(self, key_word: str) -> None:
+        self._keyword = key_word
+
+    def noun_adjective_filter(self, content: str) -> List[str]:
+        """This method is used to filter all the nouns and adjectives in
+        <content> and return these words."""
+        try:
+            sentences = nltk.sent_tokenize(content)
+        except TypeError:
+            return []
+
+        result = []
+        for sent in sentences:
+            words = nltk.pos_tag(nltk.word_tokenize(sent))
+            for i in words:
+                if i[1] in ['JJ', 'JJR', 'JJS',
+                            'RB', 'RBR', 'RBS',
+                            'NN', 'NNS', 'NNP', 'NNPS'] and i[0].isalnum():
+                    result.append(i[0])
+        return result
+
+    def generate_phrases(self, content: str) -> List[str]:
+        """This method is to generate phrases in single word, two words and
+        three words from words in <content>
+
+        >>> g = WordFrequencyGenerator('test')
+        >>> test_text = "Some ice people want to eat ice cream"
+        >>> test_result = g.generate_phrases(test_text)
+        >>> test_result
+        ['Some', 'Some ice', 'Some ice people', 'ice', 'ice people', 'ice people want', 'people', 'people want', 'people want to', 'want', 'want to', 'want to eat', 'to', 'to eat', 'to eat ice', 'eat', 'eat ice', 'eat ice cream', 'ice', 'ice cream', 'cream']
+        """
+        origin = content.split()
+        origin_length = len(origin)
+        result = []
+        for i in range(origin_length):
+            result.append(origin[i])
+            try:
+                result.append(origin[i] + ' ' + origin[i + 1])
+            except IndexError:
+                pass
+            try:
+                result.append(origin[i] + ' ' + origin[i + 1]
+                              + ' ' + origin[i + 2])
+            except IndexError:
+                pass
+        return result
+
+    def generate_noun_adjective_frequency(self, content: str) -> Dict:
+        """This method returns the frequency of nouns and adjective in <content>
+        in a form of dictionary.
+
+        >>> g = WordFrequencyGenerator('test')
+        >>> test_text = "Some ice people want to eat ice cream"
+        >>> test_result = g.generate_noun_adjective_frequency(test_text)
+        >>> test_result
+        {'ice': 2, 'people': 1, 'cream': 1}
+        """
+        tokens = self.noun_adjective_filter(content)
+        clear_tokens = tokens[:]
+        sr = stopwords.words('english')
+        for token in tokens:
+            if token in sr or \
+                    token in NONSENSE_LIST or \
+                    token in self._keyword.lower():
+                clear_tokens.remove(token)
+        freq = FreqDist(clear_tokens)
+        return dict(freq)
+
+    def top_words(self, frequency: Dict[str, int], top: int) -> Dict[str, int]:
+        """This method returns the words which have the most occurrence from
+        frequency.
+
+        >>> g = WordFrequencyGenerator('test')
+        >>> test_text = "Some ice people want to eat ice cream"
+        >>> test_result = g.generate_noun_adjective_frequency(test_text)
+        >>> g.top_words(test_result, 1)
+        {'ice': 2}
+        """
+        copy = frequency.copy()
+        tops = dict()
+        for i in range(top):
+            m = max(copy.values())
+            for key, value in copy.items():
+                if value == m and len(tops) < top:
+                    tops[key] = value
+                    copy[key] = 0
+                    i += 1
+        return tops
 
 
+if __name__ == "__main__":
+    reader = RedditReader('UofT', ['QCoNFSH3HMntdQ',
+                                   'Wp0hdaBna71vtZ6SDqEgFUGczzk', 'Test'])
+    courses = ['CSC373', 'FSL100']
+    for i in courses:
+        c = reader.read_course(i)
+        generator = WordFrequencyGenerator(i)
+        result = generator.generate_noun_adjective_frequency(c.convert_to_string())
+        print(i)
+        print(generator.top_words(result, 100))
+
+    # test_str = "What are y'all opinions on both or either of the courses? Both are required for Cogsci but for different streams and I don't know which stream to do yet because these PHL courses are throwing me off a bit."
+    # test_g = WordFrequencyGenerator("test")
+    # test_result = test_g.generate_word_frequency(test_str)
+    # print(test_g.top_words(test_result, 5))

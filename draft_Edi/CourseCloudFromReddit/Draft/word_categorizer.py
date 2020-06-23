@@ -33,17 +33,33 @@ def to_adjectives(input: str) -> List[str]:
     return adjectives
 
 
-def top_adjectives(frequency: Dict[str, int], top: int) -> Dict[str, int]:
-    copy = frequency.copy()
-    tops = dict()
-    for i in range(top):
-        m = max(copy.values())
-        for key, value in copy.items():
-            if value == m and len(tops) < top:
-                tops[key] = value
-                copy[key] = 0
-                i += 1
-    return tops
+def to_all_words(input: str) -> List[str]:
+    # try:
+    #     sentences = nltk.sent_tokenize(input)
+    # except TypeError:
+    #     return []
+
+    words = input.split(' ')
+    words_result = []
+    for word in words:
+        word = delete_punctuation(word)
+        word = word.lower()
+        if word != '' and 20 >= len(word) >= 5 and word not in NONSENSE_LIST:
+            words_result.append(word)
+    return words_result
+
+
+# def top_words(frequency: Dict[str, int], top: int) -> Dict[str, int]:
+#     copy = frequency.copy()
+#     tops = dict()
+#     for i in range(top):
+#         m = max(copy.values())
+#         for key, value in copy.items():
+#             if value == m and len(tops) < top:
+#                 tops[key] = value
+#                 copy[key] = 0
+#                 i += 1
+#     return tops
 
 
 
