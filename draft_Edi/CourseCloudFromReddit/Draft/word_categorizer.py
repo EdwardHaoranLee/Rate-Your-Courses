@@ -49,17 +49,17 @@ def to_all_words(input: str) -> List[str]:
     return words_result
 
 
-# def top_words(frequency: Dict[str, int], top: int) -> Dict[str, int]:
-#     copy = frequency.copy()
-#     tops = dict()
-#     for i in range(top):
-#         m = max(copy.values())
-#         for key, value in copy.items():
-#             if value == m and len(tops) < top:
-#                 tops[key] = value
-#                 copy[key] = 0
-#                 i += 1
-#     return tops
+def top_words(frequency: Dict[str, int], top: int) -> Dict[str, int]:
+    copy = frequency.copy()
+    tops = dict()
+    for i in range(top):
+        m = max(copy.values())
+        for key, value in copy.items():
+            if value == m and len(tops) < top:
+                tops[key] = value
+                copy[key] = 0
+                i += 1
+    return tops
 
 
 

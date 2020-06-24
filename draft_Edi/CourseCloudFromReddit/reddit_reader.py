@@ -1,6 +1,7 @@
+from typing import Dict, List, TextIO, Tuple
+from textblob import TextBlob
 import nltk
 import praw
-from typing import Tuple, TextIO, List, Dict
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 
@@ -41,6 +42,18 @@ def comment_forest_to_str_list(comment_forest) -> List[str]:
     return string_comments
 
 
+def comment_forest_to_comments(comment_forest) \
+        -> List[praw.reddit.models.Comment]:
+    raw_comments = comment_forest.list()
+    comments = []
+    for i in raw_comments:
+        try:
+            comments.extend(i.comments())
+        except AttributeError:
+            comments.append(i)
+    return comments
+
+
 def convert_one_post_to_strings(post: praw.reddit.models.Submission) -> str:
     """Extract all text in a post, including title, text and comments,
     concatenate them into a single str."""
@@ -51,6 +64,13 @@ def convert_one_post_to_strings(post: praw.reddit.models.Submission) -> str:
     result = result + title
     result = result + text
     result = result.lower()
+    return result
+
+
+def convert_one_post_to_list_strings(post: praw.reddit.models.Submission) \
+        -> List[str]:
+    result = [post.title, post.selftext]
+    result.extend(comment_forest_to_str_list(post.comments))
     return result
 
 
@@ -82,9 +102,53 @@ class CoursePostsComplex:
     def get_subreddit_name(self) -> str:
         return self._subreddit.display_name
 
+    def top_comments(self, top=10) -> List[Tuple[str, str]]:
+        """Precondition: top >= 1"""
+        comments = []
+        for i in self._posts:
+            comment_forest = i.comments
+            comments.extend(comment_forest_to_comments(comment_forest))
+        str_comments = []
+        if len(comments) <= top:
+            for i in comments:
+                str_comments.append((i.body, i.submission.shortlink))
+            return str_comments
+        for i in range(top):
+            max_upvote = -1
+            corresponding_comment = None
+            for j in comments:
+                if j.score > max_upvote:
+                    max_upvote = j.score
+                    corresponding_comment = j
+            comments.remove(corresponding_comment)
+            str_comments.append((corresponding_comment.body,
+                                 corresponding_comment.submission.shortlink))
+        return str_comments
+
+    def sentiment_analysis_of_one_post(self,
+                        post: praw.reddit.models.Submission) -> float:
+        content = convert_one_post_to_list_strings(post)
+        sentiment_scores = []
+        for i in content:
+            blob = TextBlob(i)
+            sentiment_scores.append(blob.sentiment.polarity)
+        return sum(sentiment_scores) / len(sentiment_scores)
+
+    def sentiment_analysis_score(self) -> float:
+        sentiment_scores = []
+        for i in self._posts:
+            sentiment_scores.append(self.sentiment_analysis_of_one_post(i))
+        try:
+            result = sum(sentiment_scores)/len(sentiment_scores)
+        except ZeroDivisionError:
+            result = 0.0
+        return result
+
+    def qualify_for_sentiment_analysis(self) -> bool:
+        return len(self._posts) >= 5
+
 
 class RedditReader:
-
     subreddit_name: str
     _agent: praw.reddit.Reddit
     _subreddit: praw.reddit.models.subreddits.Subreddit
@@ -198,7 +262,10 @@ class WordFrequencyGenerator:
         copy = frequency.copy()
         tops = dict()
         for i in range(top):
-            m = max(copy.values())
+            try:
+                m = max(copy.values())
+            except ValueError:
+                m = 0
             for key, value in copy.items():
                 if value == m and len(tops) < top:
                     tops[key] = value
@@ -208,17 +275,35 @@ class WordFrequencyGenerator:
 
 
 if __name__ == "__main__":
-    reader = RedditReader('UofT', ['QCoNFSH3HMntdQ',
-                                   'Wp0hdaBna71vtZ6SDqEgFUGczzk', 'Test'])
-    courses = ['CSC373', 'FSL100']
-    for i in courses:
-        c = reader.read_course(i)
-        generator = WordFrequencyGenerator(i)
-        result = generator.generate_noun_adjective_frequency(c.convert_to_string())
-        print(i)
-        print(generator.top_words(result, 100))
+    pass
+    # reader = RedditReader('UofT', ['QCoNFSH3HMntdQ',
+    #                                'Wp0hdaBna71vtZ6SDqEgFUGczzk', 'Test'])
+    # # courses = ['SMC219', 'SMC228', 'SMC229']
+    #
+    # f = open("Database/UofT_course_list.txt", "r")
+    # content = f.read()
+    # courses = content.split('\n')
+    #
+    #
+    # for i in courses:
+    #     c = reader.read_course(i)
+    #     # generator = WordFrequencyGenerator(i)
+    #     # result = generator.generate_noun_adjective_frequency(c.convert_to_string())
+    #     if c.qualify_for_sentiment_analysis():
+    #         print(i + " : " + str(c.sentiment_analysis_score()))
+    #         form_file.write(i + "," + str(c.sentiment_analysis_score()) + '\n')
+    #     # print(generator.top_words(result, 100))
+    #
+    # # f.close()
+    # form_file.close()
 
     # test_str = "What are y'all opinions on both or either of the courses? Both are required for Cogsci but for different streams and I don't know which stream to do yet because these PHL courses are throwing me off a bit."
     # test_g = WordFrequencyGenerator("test")
     # test_result = test_g.generate_word_frequency(test_str)
     # print(test_g.top_words(test_result, 5))
+
+    # reader = RedditReader('UofT', ['QCoNFSH3HMntdQ',
+    #                                'Wp0hdaBna71vtZ6SDqEgFUGczzk', 'Test'])
+    # c = reader.read_course('MAT137')
+    # print(c.top_comments())
+

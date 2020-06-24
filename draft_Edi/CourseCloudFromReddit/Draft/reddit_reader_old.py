@@ -187,14 +187,14 @@ class RedditReader:
 
     def words_frequency(self, limit=1000) -> Dict[str, Dict[str, int]]:
         all_words = self.to_all_words(limit)
-        # frequencies = dict()
-        # for course in self._course_list:
-        #     words = all_words[course]
-        #     frequency = dict()
-        #     for word in words:
-        #         frequency[word] = words.count(word)
-        #     frequencies[course] = frequency
-        # return frequencies
+        frequencies = dict()
+        for course in self._course_list:
+            words = all_words[course]
+            frequency = dict()
+            for word in words:
+                frequency[word] = words.count(word)
+            frequencies[course] = frequency
+        return frequencies
 
 
 reader = RedditReader('UofT', ['MAT235'],
