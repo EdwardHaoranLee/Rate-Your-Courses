@@ -18,18 +18,18 @@ var courses = {
 };
     
 app.get("/", function(req, res){
-    res.sendFile(__dirname+'/landing.html');
+    res.sendFile(__dirname+'/Jas_web/landing.html');
 });
 
 app.get("/result", function(req, res){
-    res.sendFile(__dirname+'/result.html');
+    res.sendFile(__dirname+'/Jas_web/result.html');
 });
+
+
 
 
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
-  console.log("===========================");
-  console.log("       SERVER STARTED      ");
-  console.log("===========================");
+  console.log("====== SERVER STARTED!!! ======");
 });
