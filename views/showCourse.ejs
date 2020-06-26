@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
     <!-- Nav Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Navbar</a>
@@ -43,47 +42,31 @@
 			</ul>
 		</div>
     </nav>
-    
-    <div class="container">
-        <div class="w-75 p-3 mx-auto">
-                <!-- Search Engine -->
-            <form>
-                <div class="form-group">
-                    <label for="inputCourse">Course</label>
-                    <input type="text" class="form-control" id="inputCourse" placeholder="MAT235, PSY100...">
+    <div class="container mt-5">
+        <div class="row">
+            <!-- course name and score -->
+            <div class="col-5">
+                <div>
+              
+                    <h1>ECO101 <span>4.2/5</span></h1>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="inputCampus">Campus</label>
-                        <select id="inputCampus" class="form-control">
-                        <option selected>st.George</option>
-                        <option>UTM</option>
-                        <option>UTSC</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="inputTimeRange">Time Range</label>
-                        <select id="inputTimeRange" class="form-control">
-                        <option selected>Default..</option>
-                        <option>past year</option>
-                        <option>past 3 years</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="inputAlgorithm">评分算法</label>
-                        <select id="inputAlgorithm" class="form-control">
-                        <option selected>Default..</option>
-                        <option>coming soon</option>
-                        <option>coming soon</option>
-                        </select>
-                    </div>
+                <div>
+                  
+                  <img src="Wordcloud_image/CSC265.png"/>
+         
+                  
                 </div>
-                <button  type="submit" class="btn btn-primary">Search</button>
-                <a href="/result" >To result page ECO101</a>
-            </form>
-        </div>
 
+            
+            </div>
+            <!-- Review list -->
+            <div class="col-6">
+                <p>keyima</p>
+            </div>
+         
+        </div>
     </div>
+
 
       
 

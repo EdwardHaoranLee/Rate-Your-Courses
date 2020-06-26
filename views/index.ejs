@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RateMyCourse</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+      .jumbotron {
+        background-image: url(https://static.wixstatic.com/media/a03971_27473bf738b94d799d4e3c64873ac90f~mv2.jpg/v1/fit/w_1024,h_458,al_c,q_80/file.jpg);
+        width:100%;
+        padding-top: 20%;
+        background-position: center; 
+        background-repeat: no-repeat; 
+        background-size: cover; 
+        }
+      .search-form {
+        padding-left:10%;
+        padding-right:10%;
+        width: 100%;
+        height: 100%;
+        /* background-color: #fff; */
+        opacity: 0.9;
+        border-radius: 30px;
+        background: #f9f9f5
+        }      
+      .button-primary{
+        background-color:#c9694b;
+        color:white;
+      }
+
+      .bg-half-black {
+        background: #ad5133;
+      }
+
+      .section-header {
+        color: #5f5c48;
+      }
+
+
+    </style>
+  </head>
+
+<body>
+
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-half-black">
+        <a class="navbar-brand" href="#">Rate Your Course</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Team</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Develop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+              <a class="nav-link" href="#">Login</a>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link" href="#">Sign up</a>
+              </li>
+          </ul>
+        </div>
+    </nav>
+
+    <!--first page -->
+    <div class='jumbotron'>
+      
+      <div class="container">
+        <h1 class="font-weight-bold"> Rate Your Course</h1>
+        <div class="search-form py-5 mx-auto">
+          <form>
+            <div class="form-row align-items-center">
+              <div class="col-sm-3 my-1">
+                <label for="inputCourse">Course</label>
+                <input type="text" class="form-control" id="inputCourse" placeholder="MAT235, PSY100...">
+              </div>
+
+              <div class="col-sm-3 my-1">
+                <label for="inputCampus">Campus</label>
+                <select id="inputCampus" class="form-control">
+                  <option selected>st.George</option>
+                  <option>UTM</option>
+                  <option>UTSC</option>
+                </select>
+              </div>
+              <div class="col-sm-3 my-1">
+                <label for="inputTimeRange">Time Range</label>
+                <select id="inputTimeRange" class="form-control">
+                  <option selected>Default..</option>
+                  <option>past year</option>
+                  <option>past 3 years</option>
+                </select>
+              </div>
+              <div class="col-auto my-1">
+                <button type="submit" class="btn button-primary mt-4">Submit</button>
+                <a href="/result" >To ECO101</a>
+              </div>
+              
+            </div>
+          </form>
+        </div>
+      </div>           
+    </div>
+
+    <div class="container">
+      <!-- Trending Courses -->
+      <h1 class="section-header">Popular BR Courses</h2>
+      <hr>
+      <h1 class="section-header">Tips and Tricks</h2>
+      <div class="w-75 p-3 mx-auto">
+
+          
+      </div>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
