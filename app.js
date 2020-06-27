@@ -1,6 +1,8 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
+
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
@@ -9,46 +11,28 @@ app.use(express.static(__dirname + "/public"));
 var data = {
 	"CSC265":
 		{
-			"cloud_path":"Wordcloud_image/CSC265.txt",
-			"score":"7.4145035029429245",
+			"cloud_path":"/Wordcloud_image/CSC265.png",
+			"score":"7.41",
 			"top_review":[
 				["For you, anything that involves human interaction","https://redd.it/985n7o"],
 				["why you take all bird courses","https://redd.it/985n7o"],
-				["https://imgur.com/a/4BtkPgw","https://redd.it/985n7o"],
 				["Teach me your ways plz, will watching Ricky and Morty once be enough?","https://redd.it/985n7o"],
 				["0/10 shitpost ","https://redd.it/985n7o"],
-				["This guy is legit","https://redd.it/985n7o"],
-				["I actually did this before as well somewhere in the archives, but here's a better attempt at quantitatively answering your question. I'm only using publicly available data here.\n\nUpshot: students in MAT257 can expect do get a grade that's about 8 points below what they got in MAT157, probably.\n\nThe averages in both MAT157 and MAT257 in the years that I took them were both C+. About half the number of students who finish MAT157 end up finishing MAT257. \n\nI'm modelling the probability of completing MAT257 as 1/(1+exp(1.7-10*((mark-50)/100))), where mark is the mark in MAT157.\n\nThis gives a probability of 15% for completing MAT257 if you got a 50 in MAT157, a probability of 78% of completing MAT257 if you got an 80 in MAT157, and a probability of 91% of completing MAT257 if you got a 90 in MAT157. This I think sounds vaguely plausible, though that's just a guess.\n\nIf the model is right, you will get about half of the people who complete MAT157 completing MAT257.\n\nIf the model is right, the average in MAT157 of the people completing MAT257 is about a 76, which means that you can expect to get a mark that's about 8 points lower in MAT257 than what you got in MAT157, on average.\n\nI didn't repeat the same thing for MAT347/MAT357. My intuition is that marks stabilize by third year, but I'm not sure.\n\n\n        #Generate random grades with mean 68 and sd of slightly less than 15\n        \n        d157 <- rnorm(100000, mean=68, sd=15)\n        d157[d157>100]=100\n        d157[d157<0]=0\n        \n        \n        #Probability of completing 257 given a mark in 157\n        p_stay <- function(mark){\n          return(( 1/(1+exp(1.7-10*((mark-50)/100))))  * (mark >= 50))\n        }\n        \n        \n        #Sanity check: compute the probabilities of completing MAT257\n        #              given that marks in 157\n        cat(p_stay(c(50, 60, 70, 80, 90, 95)))\n        #0.1544653 0.3318122 0.5744425 0.785835 0.908877 0.9426758\n        \n        #Sanity check: compute the proportion of people who completed\n        #157 who go on to complete 257\n        \n        rbernoulli <- function(prob){\n          return(rbinom(n=1, prob=prob, size=1))\n        }\n        \n        stay <- sapply(p_stay(d157), FUN=rbernoulli)\n        \n        cat(mean(stay))\n        #0.51 -- about right\n        \n        \n        #Compute the mean grade in MAT157 for people who completed MAT257\n        mean(d157[stay==1])\n        #76.2\n","https://redd.it/6ngqm4"],
-				["take csc343 with me \n\nid love to query ur database if u kno what i mean","https://redd.it/69vvpr"],
+                ["This guy is legit","https://redd.it/985n7o"],
+                ["take csc343 with me \n\nid love to query ur database if u kno what i mean","https://redd.it/69vvpr"],
 				["Math courses in general are harder than cs courses, because it requires more abstract thinking as you take upper year math courses. As a cs specialist, I got very good mark in mat137, 223, 235 and 224.. But I decided to not go into further study in mathematics, because most of 300 level mat courses require that you have taken 257/246 or got really good mark in 237.... I would have to say mat257 is harder than any cs courses... yes including csc373...","https://redd.it/7fhhle"],
 				[">  what's to stop me from enrolling in 265 (which lists 207 as a corequisite) and dropping down to 263? \n\nKicking you out of 263 again","https://redd.it/d67qnj"]]
 		},
 	"ABP100":
 		{
-			"cloud_path":"Wordcloud_image/ABP100.txt",
+			"cloud_path":"/Wordcloud_image/ABP100.png",
 			"score":"-100.0",
 			"top_review":[]
 		},
-	"ECO200":
-		{
-			"cloud_path":"Wordcloud_image/ECO200.txt",
-			"score":"8.020077658862027",
-			"top_review":[
-				["slash means \"or\", comma or semicolon means \"and\"","https://redd.it/cahbv3"],
-				["50/50.  Either you get in, or you don't.  ","https://redd.it/6scsc1"],
-				["also anyone know where the eco200 midterm is taking place today?","https://redd.it/5cdsmy"],
-				["So like, what do you actually want advice on?","https://redd.it/8n8eor"],
-				["Way easier than ECO200s. \n\nThe higher you get the less work. 300s are still difficult, but 400s are easier. \n\nThere are some courses like the econometrics that are still lots of assignments and essays. But once you get to a level 300s and 400s start becoming more readings and essay writing. So it really depends on the specific courses. I've found they make you think more than the 200s because at that point its less about plugging in answers and more about critical thinking.","https://redd.it/fyffmm"],
-				["pretty sure as long as you wrote the correct exam, you'll be fine. ","https://redd.it/8bwv1k"],
-				["If you’re going for graduate studies in economics, ECO206 and ECO208 are definitely the way to go, partly because they prepare you better for more advanced 300/400 series theory courses. However you can definitely still succeed with ECO200/202. It’s not as vital as say, not taking more courses in math and mathematical statistics.","https://redd.it/g1m8jq"],
-				["I ended up going to school for one class today thinking it's on, but apparently it wasn't and I got no e-mail about it being cancelled. Wasted 2 hours where I could be grilling. ","https://redd.it/2xpv10"],
-				["Maybe set up a google doc?","https://redd.it/2xpv10"],
-				["Because they don't want to publicize how much the strike is affecting the university. They want a veneer of \"business as usual\".","https://redd.it/2xpv10"]]
-		},
 	"MAT235":
 		{
-			"cloud_path":"Wordcloud_image/MAT235.txt",
-			"score":"5.315197567132085",
+			"cloud_path":"/Wordcloud_image/MAT235.png",
+			"score":"5.31",
 			"top_review":[
 				["nope, never felt less prepared for an exam. i havent been to a 235 lecture in months and i havent even started studying yet. also im not in MAT235.","https://redd.it/bclcqv"],
 				["yeah this is basically the entire course","https://redd.it/g1b967"],
@@ -63,8 +47,8 @@ var data = {
 		},
 	"PSY100":
 		{
-			"cloud_path":"Wordcloud_image/PSY100.txt",
-			"score":"9.456434555168068",
+			"cloud_path":"/Wordcloud_image/PSY100.png",
+			"score":"9.45",
 			"top_review":[
 				["guerrilla psychology experiment","https://redd.it/fcfapo"],
 				["SOCIAL EXPERIMENT GONE WRONG? LIKE + SUBSCRIBE","https://redd.it/fcfapo"],
@@ -84,29 +68,23 @@ var data = {
 app.get("/", function(req, res){
     res.render("index");
 });
+app.get("/search", function(req, res){
+    var courseCode = req.query.enteredCourse.toUpperCase();
+    res.redirect("/course/" + courseCode);
+});
 
 app.get("/course/:courseCode", function(req, res){
     var courseCode = req.params.courseCode;
     var thisCourse = data[courseCode];
     if(!thisCourse){
-        console.log("this is not a uoft course, please try again")
-    }else{
-        res.render("showCourse", {course:thisCourse});
-    }
+        console.log("this is not a uoft course, please try again");
+    } else {
+        console.log(thisCourse);
+        res.render("showCourse", {thisCourse:thisCourse, courseCode:courseCode});
+    };
 });
 
-// app.get("/campgrounds/:id", function(req,res){
-//     // 拆包data，用post id和comment id做reference
-//     var thisCampId = req.params.id;
-//     Campground.findById(thisCampId).populate("comments").exec(function(err, thisCamp){
-//         if(err){
-//             console.log(err);
-//         } else{
-//             res.render("campgrounds/show", {campground: thisCamp});
-//         }
-//     });
 
-// });
 
 
 

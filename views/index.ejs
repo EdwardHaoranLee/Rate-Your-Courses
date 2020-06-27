@@ -79,17 +79,17 @@
         </div>
     </nav>
 
-    <!--first page -->
+    <!--Search Bar -->
     <div class='jumbotron'>
       
       <div class="container">
         <h1 class="font-weight-bold"> Rate Your Course</h1>
         <div class="search-form py-5 mx-auto">
-          <form>
+          <form action="/search" method="GET">
             <div class="form-row align-items-center">
               <div class="col-sm-3 my-1">
                 <label for="inputCourse">Course</label>
-                <input type="text" class="form-control" id="inputCourse" placeholder="MAT235, PSY100...">
+                <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="MAT235, PSY100...">
               </div>
 
               <div class="col-sm-3 my-1">

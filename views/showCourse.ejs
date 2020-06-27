@@ -45,25 +45,32 @@
     <div class="container mt-5">
         <div class="row">
             <!-- course name and score -->
-            <div class="col-5">
-                <div>
-              
-                    <h1>ECO101 <span>4.2/5</span></h1>
-                </div>
-                <div>
-                  
-                  <img src="Wordcloud_image/CSC265.png"/>
-         
-                  
-                </div>
+            <div class="col-md-5 col-12">
+              <div>
+                  <h1>Course: <%= courseCode%></h1>
+                  <h3>Data Structures and Analysis</h3>
+                  <h3>Score: <%= thisCourse.score%></h3>
+                  <h5>Description:</h5>
+                  <p>Algorithm analysis: worst-case, average-case, and amortized complexity. Expected worst-case complexity, randomized quicksort and selection.</p>
+              </div>
+            </div>
+            <div class="col-md-7 col-12">
+              <img class="img-fluid" src="<%= thisCourse.cloud_path %>">
+            </div>
+        </div>
+        <hr>
+        <!-- Review list -->
+        <div class="column mt-5">
+          <% thisCourse.top_review.forEach(function(review){ %>
+            <div class="row">
+                  <div class="card-body">
+                    <p class="card-text"><%= review[0] %></p>
+                    <a href="<%= review[1] %>">Original Thread</a>
+                    <hr>
+                  </div>
+            </div>
+          <% }) %>
 
-            
-            </div>
-            <!-- Review list -->
-            <div class="col-6">
-                <p>keyima</p>
-            </div>
-         
         </div>
     </div>
 
