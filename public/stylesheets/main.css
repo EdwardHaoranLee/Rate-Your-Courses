@@ -1,0 +1,43 @@
+.jumbotron {
+    background-image: url(https://static.wixstatic.com/media/a03971_27473bf738b94d799d4e3c64873ac90f~mv2.jpg/v1/fit/w_1024,h_458,al_c,q_80/file.jpg);
+    width:100%;
+    padding-top: 20%;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover; 
+}
+
+  .search-form {
+    padding-left:10%;
+    padding-right:10%;
+    width: 100%;
+    height: 100%;
+    /* background-color: #fff; */
+    opacity: 0.9;
+    border-radius: 30px;
+    background: #f9f9f5
+}      
+
+  .button-primary{
+    background-color:#c9694b;
+    color:white;
+}
+  .button-secondary{
+    color:#5894b1
+}
+
+
+
+  .bg-half-black {
+    background: #ad5133;
+}
+
+
+.primary-color {
+    color:#ad5133;
+}
+
+
+  .section-header {
+    color: #5f5c48;
+}

@@ -64,13 +64,15 @@ var data = {
 };
 
 
-
 app.get("/", function(req, res){
     res.render("index");
 });
 app.get("/search", function(req, res){
     var courseCode = req.query.enteredCourse.toUpperCase();
-    res.redirect("/course/" + courseCode);
+    if (courseCode){
+        res.redirect("/course/" + courseCode);
+    }
+    
 });
 
 app.get("/course/:courseCode", function(req, res){
@@ -83,9 +85,6 @@ app.get("/course/:courseCode", function(req, res){
         res.render("showCourse", {thisCourse:thisCourse, courseCode:courseCode});
     };
 });
-
-
-
 
 
 var port = process.env.PORT || 3000;
