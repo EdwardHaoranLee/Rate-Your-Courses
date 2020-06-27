@@ -67,12 +67,14 @@ var data = {
 app.get("/", function(req, res){
     res.render("index");
 });
+app.get("/courses", function(req, res){
+    res.render("allCourses");
+});
 app.get("/search", function(req, res){
     var courseCode = req.query.enteredCourse.toUpperCase();
     if (courseCode){
         res.redirect("/course/" + courseCode);
     }
-    
 });
 
 app.get("/course/:courseCode", function(req, res){
