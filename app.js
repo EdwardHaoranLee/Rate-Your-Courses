@@ -1,6 +1,8 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
+var mongoose = require('mongoose');
+var data = require('./database/data.json');
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -8,7 +10,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
 
-var data = {
+var data123 = {
 	"CSC265":
 		{
 			"cloud_path":"/Wordcloud_image/CSC265.png",
@@ -63,6 +65,20 @@ var data = {
 		},
 };
 
+// ===== CONNECT TO MONGO DB =====
+
+var url = "mongodb://localhost/test"
+mongoose.connect(url, {
+        useNewUrlParser: true,
+		useUnifiedTopology: true,});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {console.log("Database connected!")});
+console.log(data);
+
+// ======== ROUTING ========
+
 
 app.get("/", function(req, res){
     res.render("index");
@@ -81,7 +97,8 @@ app.get("/course/:courseCode", function(req, res){
     var courseCode = req.params.courseCode;
     var thisCourse = data[courseCode];
     if(!thisCourse){
-        console.log("this is not a uoft course, please try again");
+		console.log("this is not a uoft course, please try again");
+		res.redirect("/");
     } else {
         console.log(thisCourse);
         res.render("showCourse", {thisCourse:thisCourse, courseCode:courseCode});
@@ -91,5 +108,5 @@ app.get("/course/:courseCode", function(req, res){
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
-  console.log("====== SERVER STARTED!!! ======");
+  console.log("SERVER STARTED!!! ");
 });
