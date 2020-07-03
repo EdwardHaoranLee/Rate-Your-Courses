@@ -38,6 +38,69 @@
 }
 
 
-  .section-header {
-    color: #5f5c48;
+.section-header {
+  color: #5f5c48;
+}
+
+.card-img-top {
+  padding-top: 2vw;
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
+}
+
+
+.trending-course-img {
+  padding-top: 2vw;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.container{
+  padding-bottom: 5%;
+}
+
+.card-img-overlay{
+  height:20%;
+  width: 90%;
+  margin-top: 10rem;
+  background-color:#ad5133;
+  opacity:.8;
+}
+
+.overlay111 {
+  position: absolute;
+  bottom: 0;
+  background: #952803;
+  background: #952703b0;
+  color: white;
+  width: 100%;
+  transition: .5s ease;
+  opacity:1;
+  color: white;
+  font-size: 20px;
+
+  padding: 20px;
+  text-align: center;
+}
+
+.container111:hover .overlay111 {
+  opacity: 0;
+}
+
+.container111 {
+  position: relative;
+  width:100%;
+  border: 2px solid lightgray;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
+  border-radius: 10px;
+  overflow: hidden;
+
+}
+
+.image111 {
+  display: block;
+  width: 100%;
+  height: auto;
 }
