@@ -5,29 +5,41 @@
             <!-- course name and score -->
             <div class="col-md-5 col-12">
               <div>
-                  <h1>Course: <%= courseCode%></h1>
-                  <h3>Data Structures and Analysis</h3>
-                  <h3>Score: <%= thisCourse.score%></h3>
+                  <h1>Course: <%= course.code%></h1>
+                  <h3><%= course.name%></h3>
+                  <h3>Score: <%= course.scoure%></h3>
                   <h5>Description:</h5>
-                  <p>Algorithm analysis: worst-case, average-case, and amortized complexity. Expected worst-case complexity, randomized quicksort and selection.</p>
+                  <p><%= course.description%></p>
+                  <p>BR: <%= course.br_category%></p>
+                  <p>Is Offered Now? <%= course.is_offered_now%></p>
+                  <p>Monthly viewed: <%= course.monthly_visit%></p>
+
+
               </div>
             </div>
             <div class="col-md-7 col-12">
-              <img class="img-fluid" src="<%= thisCourse.cloud_path %>">
+              <img class="img-fluid" src="<%= course.word_cloud %>">
             </div>
         </div>
         <hr>
+
         <!-- Review list -->
         <div class="column mt-5">
-          <% thisCourse.top_review.forEach(function(review){ %>
-            <div class="row">
-                  <div class="card-body">
-                    <p class="card-text"><%= review[0] %></p>
-                    <a class="button-secondary" href="<%= review[1] %>">Original Thread</a>
-                    <hr>
-                  </div>
-            </div>
-          <% }) %>
+          <% for(var comment of course.reddit_comments){ %>
+            
+              <div class="row">
+                <div class="card-body">
+                  <p class="card-text"><%= comment.content %></p>
+                  <a class="button-secondary" href="<%= comment.url %>">Original Thread</a>
+                  <!-- <p> Not relevent comments? Let us know!</p> -->
+                  <button type="button" class="btn btn-primary btn-sm ">relevant👍<%= comment.relevant_score %></button>
+                  <button type="button" class="btn btn-secondary btn-sm ">not relevant👎<%= comment.nonrelevant_score %></button>
+                  <button type="button" class="btn btn-warning btn-sm ">funny😆<%= comment.funny_score %></button>
+                  <hr>
+                </div>
+              </div>
+            <% } %>
+      
 
         </div>
     </div>

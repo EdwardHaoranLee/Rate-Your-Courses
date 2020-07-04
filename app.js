@@ -2,8 +2,10 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
-var data = require('./database/data.json');
 var seedDB = require('./database/seed');
+var Course = require('./database/modules/course');
+var RedditComment = require('./database/modules/redditComment');
+var CourseReviewComment = require('./database/modules/courseReview');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -26,38 +28,56 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {console.log("Database connected!")});
 
-// ===== INITIALIZING DATABASE =====
 
+// =======  DANGEROUS ZONE  ==========
+// seedDB();
+// =======  DANGEROUS ZONE  ==========
 
 
 // ======== ROUTING ========
-seedDB();
+
 
 app.get("/", function(req, res){
     res.render("index");
 });
 app.get("/courses", function(req, res){
-    res.render("allCourses");
+	Course.find().sort('code').exec((err,courseList) => {
+		if(err){
+			console.log(err);
+		} else{
+			res.render("allCourses",{courseList: courseList});
+		}
+	})
 });
+
+app.get("/about", function(req, res){
+    res.render("about");
+});
+
 app.get("/search", function(req, res){
     var courseCode = req.query.enteredCourse.toUpperCase();
     if (courseCode){
         res.redirect("/course/" + courseCode);
-    }
+    }else {
+		res.redirect("/");
+	}
 });
-
-
 
 app.get("/course/:courseCode", function(req, res){
     var courseCode = req.params.courseCode;
-    var thisCourse = data[courseCode];
-    if(!thisCourse){
-		console.log("this is not a uoft course, please try again");
-		res.redirect("/");
-    } else {
-        console.log(thisCourse);
-        res.render("showCourse", {thisCourse:thisCourse, courseCode:courseCode});
-    };
+	// var thisCourse = data[courseCode];
+	Course.findOne({ code: courseCode })
+	.populate("reddit_comments")
+	.populate("course_reviews")
+	.exec(function (err, thisCourse) {
+		if(err){
+			console.log("this is not a uoft course, please try again");
+			res.redirect("/");
+		} else {
+			res.render("showCourse", {course:thisCourse});
+		};
+	});
+
 });
 
 

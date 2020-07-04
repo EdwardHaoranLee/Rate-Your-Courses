@@ -1,5 +1,39 @@
 <%- include("partials/header.ejs") %>
 
-<h1>Every course will be list here, ranking and stuff</h1>
+<div class="container">
+    <h1>All Courses:</h1>
+
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Course</th>
+            <th scope="col">Name</th>
+            <th scope="col">Score</th>
+            <th scope="col">BR category</th>
+            <th scope="col">Monthly Visit</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% for (var course of courseList){ %>
+            <tr class="table-row  list-group-item-info" 
+                data-href="<%='/course/' + course.code %>">
+
+                <td><%= course.code  %></td>
+                <td><%= course.name  %></td>
+                <td><%= course.score.toFixed(2)  %></td>
+                <td><%= course.br_category %></td>
+                <td><%= course.monthly_visit  %></td>
+    
+            </tr>
+            <% } %>
+        </tbody>
+      </table>
+
+
+</div>
+
+
+
 
 <%- include("partials/footer.ejs") %>
