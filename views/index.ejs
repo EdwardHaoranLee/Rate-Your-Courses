@@ -1,0 +1,163 @@
+<%- include("partials/header.ejs") %>
+    <!--Search Bar -->
+    <div class='jumbotron'>
+      
+      <div class="container">
+        <h1 class="font-weight-bold"> Rate Your Course</h1>
+        <div class="search-form py-5 mx-auto">
+          <form action="/search" method="GET">
+            <div class="form-row align-items-center">
+              <div class="col-sm-3 my-1">
+                <label for="inputCourse">Course</label>
+                <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="MAT235, PSY100...">
+              </div>
+
+              <div class="col-sm-3 my-1">
+                <label for="inputCampus">Campus</label>
+                <select id="inputCampus" class="form-control">
+                  <option selected>st.George</option>
+                  <option>UTM</option>
+                  <option>UTSC</option>
+                </select>
+              </div>
+              <div class="col-sm-3 my-1">
+                <label for="inputTimeRange">Time Range</label>
+                <select id="inputTimeRange" class="form-control">
+                  <option selected>Default..</option>
+                  <option>past year</option>
+                  <option>past 3 years</option>
+                </select>
+              </div>
+              <div class="col-auto my-1">
+                <button type="submit" class="btn button-primary mt-4">Submit</button>
+              </div>
+              
+            </div>
+          </form>
+        </div>
+      </div>           
+    </div>
+    <!-- Search section end -->
+
+
+    <div class="container" style="margin-top: 5%;">
+      <!-- Trending Courses -->
+      <h1 class="section-header">~ Trending Courses ~</h2>
+      <h6> Based on real-time traffic </h6>
+        <div class="row ">
+
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="#">
+                <img class="image111" src="/Wordcloud_image/PSY100.png">
+                <div class="overlay111">PSY100 monthly view:128</div>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="#">
+                <img class="image111" src="/Wordcloud_image/ECO200.png">
+                <div class="overlay111">ECO200</div>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="#">
+                <img class="image111" src="/Wordcloud_image/MAT235.png">
+                <div class="overlay111">MAT235</div>
+              </a>
+            </div>
+          </div>
+
+        </div>
+        <div class="row  ">
+
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="#">
+                <img class="image111" src="/Wordcloud_image/CSC265.png">
+                <div class="overlay111">CSC265</div>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="#">
+                <img class="image111" src="/Wordcloud_image/ABP100.png">
+                <div class="overlay111">ABP100</div>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="#">
+                <img class="image111" src="/Wordcloud_image/ENV205.png">
+                <div class="overlay111">ENV205</div>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+
+        
+
+
+      </div>
+
+
+
+
+
+
+      <!-- Article Section -->
+      <div class=container>
+        <hr>
+        <h1 class="section-header">~ Written by Upper Year Students ~</h2>
+        
+        <div class="row mt-5">
+          <div class="col-sm-4">
+            <div class="card" style="width: 20rem;">
+              <img class="card-img-top" src="https://previews.123rf.com/images/lembergvector/lembergvector2002/lembergvector200200028/140750172-online-language-courses-flat-vector-illustration-distance-education-remote-school-china-university-c.jpg" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title"> BR Courses Recommandation</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card" style="width: 20rem;">
+              <img class="card-img-top" src="https://live.staticflickr.com/3762/33414304515_b1cca95e92_c.jpg" alt="Card image cap">
+               <div class="card-body">
+                <h5 class="card-title">Course Selection 101</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card" style="width: 20rem;">
+              <img class="card-img-top" src="https://kit8.net/images/thumbnails/580/386/detailed/4/call_centre@2x.png" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Other Useful Resource</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        
+
+          
+      </div>
+
+
+
+
+<%- include("partials/footer.ejs") %>
+
