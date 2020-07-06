@@ -1,4 +1,5 @@
 from typing import Dict, List, TextIO, Tuple
+
 from textblob import TextBlob
 import nltk
 import praw
@@ -102,16 +103,25 @@ class CoursePostsComplex:
     def get_subreddit_name(self) -> str:
         return self._subreddit.display_name
 
-    def top_comments(self, top=10) -> List[Tuple[str, str]]:
+    def top_comments(self, top=10, apple_restriction=True) -> List[Tuple[str, str, str]]:
         """Precondition: top >= 1"""
         comments = []
         for i in self._posts:
             comment_forest = i.comments
             comments.extend(comment_forest_to_comments(comment_forest))
+        if apple_restriction:
+            comment_copy = comments[:]
+            for i in comment_copy:
+                if i.submission.link_flair_text is None or \
+                        i.submission.link_flair_text == 'Humour' or \
+                        i.body == '[deleted]' or \
+                        i.body == '[removed]' or \
+                        len(i.body) <= 3:
+                    comments.remove(i)
         str_comments = []
         if len(comments) <= top:
             for i in comments:
-                str_comments.append((i.body, i.submission.shortlink))
+                str_comments.append((i.body, i.submission.shortlink, i.submission.title))
             return str_comments
         for i in range(top):
             max_upvote = -1
@@ -122,7 +132,8 @@ class CoursePostsComplex:
                     corresponding_comment = j
             comments.remove(corresponding_comment)
             str_comments.append((corresponding_comment.body,
-                                 corresponding_comment.submission.shortlink))
+                                 corresponding_comment.submission.shortlink,
+                                 corresponding_comment.submission.title))
         return str_comments
 
     def sentiment_analysis_of_one_post(self,
@@ -147,6 +158,24 @@ class CoursePostsComplex:
     def qualify_for_sentiment_analysis(self) -> bool:
         return len(self._posts) >= 5
 
+    def course_heat(self) -> int:
+        """This method evaluate the heat of this course on reddit/r/uoft. The
+        formula of calculation is:
+        heat =  20 * number of post + 2 * upvote on each post +
+                10 * number of comment + 1 * upvote on each comment
+        """
+        if len(self._posts) == 0:
+            return 0
+        heat = len(self._posts) * 20
+        for post in self._posts:
+            heat += post.score * 2
+            comments = comment_forest_to_comments(post.comments)
+            heat += len(comments) * 10
+            for comment in comments:
+                if comment.score >= 0:
+                    heat += comment.score
+        return heat
+
 
 class RedditReader:
     subreddit_name: str
@@ -162,7 +191,7 @@ class RedditReader:
                                   user_agent=agent[2])
         self._subreddit = self._agent.subreddit(subreddit_name)
 
-    def read_course(self, course_code: str, limit=100) -> CoursePostsComplex:
+    def read_course(self, course_code: str, limit=1000) -> CoursePostsComplex:
         """Search the subreddit with the keyword <course_code>, and convert the
         search result to CoursePostsComplex."""
         course_post_complex = CoursePostsComplex(course_code, self._subreddit)
@@ -275,27 +304,26 @@ class WordFrequencyGenerator:
 
 
 if __name__ == "__main__":
-    pass
-    # reader = RedditReader('UofT', ['QCoNFSH3HMntdQ',
-    #                                'Wp0hdaBna71vtZ6SDqEgFUGczzk', 'Test'])
-    # # courses = ['SMC219', 'SMC228', 'SMC229']
-    #
-    # f = open("Database/UofT_course_list.txt", "r")
-    # content = f.read()
-    # courses = content.split('\n')
-    #
-    #
-    # for i in courses:
-    #     c = reader.read_course(i)
-    #     # generator = WordFrequencyGenerator(i)
-    #     # result = generator.generate_noun_adjective_frequency(c.convert_to_string())
-    #     if c.qualify_for_sentiment_analysis():
-    #         print(i + " : " + str(c.sentiment_analysis_score()))
-    #         form_file.write(i + "," + str(c.sentiment_analysis_score()) + '\n')
-    #     # print(generator.top_words(result, 100))
-    #
-    # # f.close()
-    # form_file.close()
+
+    reader = RedditReader('UofT', ['QCoNFSH3HMntdQ',
+                                   'Wp0hdaBna71vtZ6SDqEgFUGczzk', 'Test'])
+
+    f = open("Database/UofT_course_list.txt", "r")
+    content = f.read()
+    courses = content.split('\n')
+    form_file = open("score.csv", "w")
+
+    for i in courses:
+        c = reader.read_course(i)
+        # generator = WordFrequencyGenerator(i)
+        # result = generator.generate_noun_adjective_frequency(c.convert_to_string())
+        if c.qualify_for_sentiment_analysis():
+            print(i + " : " + str(c.sentiment_analysis_score()))
+            form_file.write(i + "," + str(c.sentiment_analysis_score()) + '\n')
+        # print(generator.top_words(result, 100))
+
+    f.close()
+    form_file.close()
 
     # test_str = "What are y'all opinions on both or either of the courses? Both are required for Cogsci but for different streams and I don't know which stream to do yet because these PHL courses are throwing me off a bit."
     # test_g = WordFrequencyGenerator("test")

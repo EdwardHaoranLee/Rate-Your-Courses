@@ -1,5 +1,4 @@
 from reddit_reader import *
-import json
 
 
 class JSONGenerator:
@@ -15,9 +14,12 @@ class JSONGenerator:
             score = course_complex.sentiment_analysis_score()
         else:
             score = -1.0
-        top_reviews = course_complex.top_comments(top_comments_limit)
-        result['wordcloud_path'] = 'Wordcloud_image/' + course + '.txt'
-        result['score'] = score
+        top_reviews = course_complex.top_comments(top=top_comments_limit)
+        result['wordcloud_path'] = '/Wordcloud_image/' + course + '.png'
+        if score != -1.0:
+            result['score'] = score * 500
+        else:
+            result['score'] = 'None'
         result['top_reviews'] = top_reviews
         return result
 
