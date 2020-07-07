@@ -1,0 +1,42 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container">
+	<h1 class="text-center">Log in</h1>
+	<div class="mx-auto m-3 w-50">
+		<form action="/login" method="POST">
+			<div class="form-group">
+				<label for="inputUserName">User Name</label>
+				<input type="text" id="inputUserName" class="form-control" name="username" placeholder="Username" required>
+			</div>
+			<div class="form-group">
+				<label for="inputPassword">Password</label>
+				<input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="form-group">
+                <div class="google-btn">
+                    <div class="google-icon-wrapper">
+                      <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+                    </div>
+                    <p href="/login/google" class="google-btn-text"><b>Sign in with google</b></p>
+                </div>
+            </div>
+    
+    
+            <div class="form-group">
+                <a href="/login/google">Login with Google! True one!</a>
+            </div>
+
+
+			<button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+
+
+
+
+		<a href="/">Go back</a>
+	</div>
+	
+
+</div>
+<%- include("partials/footer.ejs") %>

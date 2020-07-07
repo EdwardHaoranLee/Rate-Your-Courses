@@ -23,7 +23,7 @@
         </div>
         <hr>
 
-        <!-- Review list -->
+        <!-- Reddit Comment list -->
         <div class="column mt-5">
           <% for(var comment of course.reddit_comments){ %>
             
@@ -32,7 +32,7 @@
                   <p class="card-text"><%= comment.content %></p>
                   <a class="button-secondary" href="<%= comment.url %>">Original Thread</a>
                   <!-- <p> Not relevent comments? Let us know!</p> -->
-                  <button type="button" class="btn btn-primary btn-sm ">relevant👍<%= comment.relevant_score %></button>
+                  <button type="button" class="btn button-primary btn-sm ">relevant👍<%= comment.relevant_score %></button>
                   <button type="button" class="btn btn-secondary btn-sm ">not relevant👎<%= comment.nonrelevant_score %></button>
                   <button type="button" class="btn btn-warning btn-sm ">funny😆<%= comment.funny_score %></button>
                   <hr>
@@ -42,6 +42,106 @@
       
 
         </div>
+
+
+        <!-- User uploaded comment section  -->
+
+        <div class=" p-4 mt-2 border bg-light">
+
+          <div class="border border-dange mb-2" style="height:5em">
+            <h2> Review from your classmates</h5>
+
+          </div>
+
+          <form action="/course/<%= course.code %>/new-review" method="post" >
+            <div class="form-row align-items-center">
+      
+                <div class="col-md-3 my-1">
+                  <label for="inputUsefulness">Usefulness</label>
+                  <select id="inputUsefulness" name="usefulness" class="form-control" required>
+                    <option value=""> - - Scale 1-5 - -</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+
+                  </select>
+                </div>
+          
+              <div class="col-md-3 my-1">
+                <label for="inputDifficulty">Difficulty</label>
+                <select id="inputDifficulty"  name="difficulty" class="form-control" required>
+                  <option value="">- - Scale 1-5 - -</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 my-1">
+                <label for="inputBR">Taking it as BR?</label>
+                <select id="inputBR" name="br" class="form-control" required>
+                  <option value="">Please select...</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+
+
+            </div>
+
+            <div class="form-group">
+              <label for="inputReviewTitle">Review Title</label>
+              <input type="text" class="form-control" id="inputReviewTitle" name="courseReviewTitle" placeholder="Enter a title.." required >
+            </div>
+            <div class="form-group">
+              <label for="inputCourseReview">Leave a useful review for you fellows!</label>
+              
+              <textarea class="form-control" id="inputCourseReview" name="courseReview" rows="5" required  placeholder="Professor name, workload, what I like/hate about..."></textarea>
+            </div>
+
+            <div class="text-right">
+              <button type="submit" class="btn button-primary mt-4">Add a course review</button>
+            </div>
+          </form>
+
+          
+          <% course.course_reviews.forEach(function(review){ %>
+            <hr>
+            <div class="row mt-4">
+              <div class="col-md-3">
+                <%= "★★★★★" + review.author%>
+
+                <p>Usefulness: <%= review.useful_score %></p>
+                <p>Difficulty: <%= review.difficulty_score %></p>
+
+              </div>
+              <div class="col-md-9" >
+                <h5><%= review.title%></h5> 
+                <p><%= review.content %></p>
+                <span> <%= review.date%> </span>   
+
+                <div>
+                  <button type="button" class="btn btn-primary btn-sm "> Upvote👍  <%= review.upvote %></button>
+                  <button type="button" class="btn btn-secondary btn-sm ">Downvote👎  <%= review.downvote %></button>
+                </div>
+              </div>
+
+
+            </div>
+          
+
+
+          <% }) %>
+
+
+                             
+        </div>
+
+
     </div>
 
 <%- include("partials/footer.ejs") %>

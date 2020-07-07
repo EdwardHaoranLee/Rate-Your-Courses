@@ -1,16 +1,20 @@
 var mongoose = require('mongoose');
 
 var courseReviewSchema = new mongoose.Schema({
-    author:{
-        id:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"User"
-        },
-        username: String,
-    },
-    date: Date,
+    // author:{
+    //     id:{
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref:"User"
+    //     },
+    //     username: String,
+    // },
+    author: String,
+    date: String,
+    title: String,
     content: String,
-    score1: Number,
+    useful_score: Number,
+    difficulty_score: Number,
+    for_br: Boolean,
     upvote: Number,
     downvote: Number,
 });
