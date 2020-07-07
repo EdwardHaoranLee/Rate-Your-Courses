@@ -52,3 +52,5 @@ After getting all the related information about reddit, we combine strings from 
 To quantitively reflect how the students feel about the target course, we will measure the sentiment of each sentence in the course complex, where negative value means negative feeling, and positive value stands for positive feeling. We are doing so by using another natural language processing library, [textblob](https://textblob.readthedocs.io/en/dev/). After that, we average the sentiment value, and turn it into a percentage. Therefore, our beloved users can compare how the public feels about those courses.
 
 ## Webpage Implementation
+
+*(Coming soon)*
