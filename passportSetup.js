@@ -1,5 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+var User = require('./database/modules/user');
 
 passport.serializeUser(function(user, done) {
     /*
@@ -25,11 +26,26 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:3000/login/google/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-    /*
-     use the profile info (mainly profile id) to check if the user is registerd in ur db
-     If yes select the user and pass him to the done callback
-     If not create the user and then select him and pass to callback
-    */
-    return done(null, profile);
+    
+    User.findOne({googleId: profile.id}).then((currentUser)=>{
+      if(currentUser){
+        console.log("existing user");
+        
+        //if we already have a record with the given profile ID
+        done(null, currentUser);
+      } else{
+            console.log("new user");
+           User.create({
+             googleId:profile.id,
+             username: profile.displayName,
+             posted_reviews:[] 
+           },function (err, user) {
+            return done(err, user);
+          });
+
+        }
+      });
+        
+    // return done(null, profile);
   }
 ));

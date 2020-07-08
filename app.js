@@ -10,10 +10,13 @@ var cookieParser = require('cookie-parser');
 
 var seedDB = require('./database/seed');
 var Course = require('./database/modules/course');
+var User = require('./database/modules/user');
 var RedditComment = require('./database/modules/redditComment');
 var CourseReview = require('./database/modules/courseReview');
 var OAuth2Data = require('./google_key.json');
 require('./passportSetup');
+
+
 
 // ======= utility =========
 
@@ -45,8 +48,8 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {console.log("Database connected!")});
 
-
-
+//========== state variables ============
+app.locals.userLocation = '';
 
 
 
@@ -54,6 +57,19 @@ db.once('open', function() {console.log("Database connected!")});
 // seedDB();
 // =======  DANGEROUS ZONE  ==========
 
+
+// ======= MIDDLEWARE ===
+app.use(function(req, res, next){
+	// 全部多pass一个currentUSer的parameter
+	if (req.user){
+		User.findById(req.user._id).exec(function (err, user){
+
+			res.locals.currentUser = user;
+		});
+	}
+
+    next();
+});
 
 
 // ======== ROUTING ========
@@ -96,13 +112,13 @@ app.get("/course/:courseCode", function(req, res){
 	.populate("reddit_comments")
 	.populate("course_reviews")
 	.exec( async function (err, thisCourse) {
-		if(err){
+		if(!thisCourse){
 			console.log("this is not a uoft course, please try again");
 			res.redirect("/");
 		} else {
-
 			thisCourse.monthly_visit++;
 			await thisCourse.save();
+			req.app.locals.userLocation = '/course/' + courseCode;
 			res.render("showCourse", {course:thisCourse});
 		};
 	});
@@ -110,7 +126,7 @@ app.get("/course/:courseCode", function(req, res){
 });
 
 // ====== posting comments =========
-app.post("/course/:courseCode/new-review",  async function(req, res){
+app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res){
 	var courseCode = req.params.courseCode;
 	
 	var response = req.body;
@@ -120,11 +136,11 @@ app.post("/course/:courseCode/new-review",  async function(req, res){
 	const currentDate = today.toLocaleDateString("en-US", dateOptions);
 	
 	var thisCourse = await Course.findOne({ code: courseCode });
+	// var isAnonymous = response.isAnonymous
 
 	var reviewCreated = await CourseReview.create(
 		{
-			// author: req.user.displayName,
-			author: "Jasmine",
+			author: res.locals.currentUser.username,
 			title: response.courseReviewTitle,
 			content:response.courseReview,
 			date: currentDate,
@@ -137,9 +153,10 @@ app.post("/course/:courseCode/new-review",  async function(req, res){
 
 	thisCourse.course_reviews.push(reviewCreated);
 	await thisCourse.save();
+	res.locals.currentUser.posted_reviews.push(reviewCreated);
+	await res.locals.currentUser.save();
 
 	console.log("Thanks I got it");
-	console.log(thisCourse.populate("course_reviews"));
     res.redirect("/course/" + courseCode);
 });
 
@@ -151,7 +168,8 @@ function isLoggedIn(req, res, next){
 		console.log("yes you logged in!")
         return next();
 	}
-	console.log("no you dint")
+	console.log("no you dint");
+
     res.redirect("/login");
 };
 
@@ -165,7 +183,13 @@ app.get('/login/failed', (req, res) => {
 
 // In this route you can see that if the user is logged in u can acess his info in: req.user
 app.get('/login/success', isLoggedIn, (req, res) => {
-	res.send(`Welcome  ${req.user.displayName}!`)});
+
+
+	console.log(req.user);
+
+	res.redirect( req.app.locals.userLocation || '/');
+
+});
 
 
 app.get("/login/google", passport.authenticate('google', { scope: ['profile', 'email'] })

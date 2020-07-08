@@ -4,15 +4,15 @@
       
       <div class="container">
         <h1 class="font-weight-bold"> Rate Your Course</h1>
-        <div class="search-form py-5 mx-auto">
-          <form action="/search" method="GET">
+        <div class="search-form py-4 mx-auto">
+          <form  class="in-line" action="/search" method="GET">
             <div class="form-row align-items-center">
               <div class="col-sm-3 my-1">
                 <label for="inputCourse">Course</label>
                 <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="MAT235, PSY100...">
               </div>
 
-              <div class="col-sm-3 my-1">
+              <!-- <div class="col-sm-3 my-1">
                 <label for="inputCampus">Campus</label>
                 <select id="inputCampus" class="form-control">
                   <option selected>st.George</option>
@@ -27,13 +27,18 @@
                   <option>past year</option>
                   <option>past 3 years</option>
                 </select>
-              </div>
+              </div> -->
               <div class="col-auto my-1">
                 <button type="submit" class="btn button-primary mt-4">Submit</button>
               </div>
-              
+
+
             </div>
           </form>
+
+          <div class="alert alert-warning" role="alert">
+            This is a warning alert—check it out!
+          </div>
         </div>
       </div>           
     </div>
