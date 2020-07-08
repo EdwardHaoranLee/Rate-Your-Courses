@@ -103,13 +103,13 @@ class CoursePostsComplex:
     def get_subreddit_name(self) -> str:
         return self._subreddit.display_name
 
-    def top_comments(self, top=10, apple_restriction=True) -> List[Tuple[str, str, str]]:
+    def top_comments(self, top=10, apply_restriction=True) -> List[Tuple[str, str, str]]:
         """Precondition: top >= 1"""
         comments = []
         for i in self._posts:
             comment_forest = i.comments
             comments.extend(comment_forest_to_comments(comment_forest))
-        if apple_restriction:
+        if apply_restriction:
             comment_copy = comments[:]
             for i in comment_copy:
                 if i.submission.link_flair_text is None or \
@@ -130,10 +130,11 @@ class CoursePostsComplex:
                 if j.score > max_upvote:
                     max_upvote = j.score
                     corresponding_comment = j
-            comments.remove(corresponding_comment)
-            str_comments.append((corresponding_comment.body,
-                                 corresponding_comment.submission.shortlink,
-                                 corresponding_comment.submission.title))
+            if corresponding_comment is not None:
+                comments.remove(corresponding_comment)
+                str_comments.append((corresponding_comment.body,
+                                     corresponding_comment.submission.shortlink,
+                                     corresponding_comment.submission.title))
         return str_comments
 
     def sentiment_analysis_of_one_post(self,

@@ -14,7 +14,8 @@ time_start = time.time()
 def course_list_file_reader(mode) -> List[str]:
     """Generate list of course based on mode."""
     if mode == TEST:
-        return ['CSC265', 'ABP100', 'ECO200', 'MAT235', 'PSY100', 'ENV200']
+        return ['VIC275']
+        # return ['CSC265', 'ABP100', 'ECO200', 'MAT235', 'PSY100', 'ENV200']
     if mode == REAL:
         # course_list_file = open("Database/UofT_course_list.txt", "r")
         # course_list_file.close()
@@ -58,7 +59,7 @@ if not os.path.exists("Database/UofT_course_list.txt"):
     course_list_downloader.UofT_course_generator_file()
 
 # Load the course list.
-course_list = course_list_file_reader(TEST)
+course_list = course_list_file_reader(REAL)
 
 # Load the course content file.
 course_content = course_detail_content_generator()
@@ -82,7 +83,11 @@ for course_code in course_list:
     start = time.time()
 
     # Generate the name and description of the course
-    content = course_content[course_code]
+    try:
+        content = course_content[course_code]
+    except KeyError:
+        print()
+        continue
 
     # Connect reddit and download the posts related to this course.
     course_complex = reader.read_course(course_code)
