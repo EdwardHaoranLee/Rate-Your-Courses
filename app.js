@@ -61,12 +61,15 @@ app.locals.userLocation = '';
 // ======= MIDDLEWARE ===
 app.use(function(req, res, next){
 	// 全部多pass一个currentUSer的parameter
+	res.locals.courseSearchError = '';
 	if (req.user){
+		
+
 		User.findById(req.user._id).exec(function (err, user){
 
 			res.locals.currentUser = user;
 		});
-	}
+	} 
 
     next();
 });
@@ -77,7 +80,7 @@ app.use(function(req, res, next){
 
 app.get("/", function(req, res){
 
-    res.render("index");
+    res.render("index",{err: ''});
 });
 app.get("/courses", function(req, res){
 	Course.find().sort('code').exec((err,courseList) => {
@@ -101,6 +104,7 @@ app.get("/search", function(req, res){
     if (courseCode){
         res.redirect("/course/" + courseCode);
     }else {
+		
 		res.redirect("/");
 	}
 });
@@ -113,8 +117,10 @@ app.get("/course/:courseCode", function(req, res){
 	.populate("course_reviews")
 	.exec( async function (err, thisCourse) {
 		if(!thisCourse){
-			console.log("this is not a uoft course, please try again");
-			res.redirect("/");
+
+			// res.redirect("/", );
+		
+			res.render("index", {err: "this is not a UofT course, please try again" })
 		} else {
 			thisCourse.monthly_visit++;
 			await thisCourse.save();

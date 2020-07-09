@@ -3,24 +3,27 @@
     <div class='jumbotron'>
       
       <div class="container">
-        <h1 class="font-weight-bold"> Rate Your Course</h1>
+
         <div class="search-form py-4 mx-auto">
+          <h1 class="font-weight-bold"> Rate Your Course</h1>
+          <h6>Let's make course selection easy peasy </h6>
+          <!-- <h6>[this web is only a preliminary release, leave a feedback or request a feature]</h6> -->
+          
           <form  class="in-line" action="/search" method="GET">
             <div class="form-row align-items-center">
-              <div class="col-sm-3 my-1">
-                <label for="inputCourse">Course</label>
-                <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="MAT235, PSY100...">
+              <div class="col-sm-4 my-1">
+                <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="Enter a course code">
               </div>
 
-              <!-- <div class="col-sm-3 my-1">
-                <label for="inputCampus">Campus</label>
-                <select id="inputCampus" class="form-control">
-                  <option selected>st.George</option>
-                  <option>UTM</option>
-                  <option>UTSC</option>
-                </select>
-              </div>
               <div class="col-sm-3 my-1">
+                <select id="inputCampus" class="form-control">
+                  <option selected>St.George campus</option>
+                  <option>UTM (coming soon)</option>
+                  <option>UTSC(coming soon)</option>
+                </select>
+              
+              </div>
+              <!--<div class="col-sm-3 my-1">
                 <label for="inputTimeRange">Time Range</label>
                 <select id="inputTimeRange" class="form-control">
                   <option selected>Default..</option>
@@ -28,17 +31,22 @@
                   <option>past 3 years</option>
                 </select>
               </div> -->
-              <div class="col-auto my-1">
-                <button type="submit" class="btn button-primary mt-4">Submit</button>
+              <div class="col-auto  my-2 ">
+                <button type="submit" class="btn button-primary" >&nbsp &nbsp Search &nbsp &nbsp</button>
+              </div>
+              <div class="col-auto my-2">
+                <a href="/courses" class="btn button-primary" > or view all courses</a>
               </div>
 
 
             </div>
           </form>
 
-          <div class="alert alert-warning" role="alert">
-            This is a warning alert—check it out!
-          </div>
+          <% if(err){ %>
+            <div class="alert alert-warning" role="alert">
+              <%= err%>
+            </div>
+          <%}%>
         </div>
       </div>           
     </div>

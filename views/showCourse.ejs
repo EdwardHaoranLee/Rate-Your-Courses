@@ -9,11 +9,24 @@
                   <h3><%= course.name%></h3>
                   <h4>Usefulness: N/A</h3>
                   <h4>Difficulties: N/A</h3>
-                  <h4>Comment Emotion Score: <%= course.score.toFixed(2)%></h3>
+                  <h4>
+                    Sentiment Score: <%= course.score.toFixed(2)%>
+                    <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
+                    title="What's this?" 
+                    data-content="This score calculated using sentimental analysis based on thousands of relavent posts on UofT reddit ">
+                    ?</a>
+                  </h4>
 
-                  <!-- <p>BR: <%= course.br_category%></p> -->
-                  <!-- <p>Is Offered Now? <%= course.is_offered_now%></p> -->
+                  <p>BR: <%= course.br_category%></p>
+                  <p>Is Offered Now? <%= course.is_offered_now%></p>
                   <p>Monthly viewed: <%= course.monthly_visit%></p>
+                  <p>
+                    Hot Index:  30000
+                    <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
+                    title="What's that" 
+                    data-content="Calculated based on # of related posts, replies, and upvotes on UofT reddit">
+                    ?</a>
+                  </p>
                   <!-- hot指数 -->
               </div>
             </div>
@@ -34,11 +47,12 @@
                 <div class="card-body">
                   <h5>I am a comment title</h5>
                   <p class="card-text"><%= comment.content %></p>
-                  <a class="button-secondary" href="<%= comment.url %>">Original Thread</a>
+                  
                   <!-- <p> Not relevent comments? Let us know!</p> -->
 
                   <form>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <a class="button-secondary mr-2" href="<%= comment.url %>">Original Reddit Post</a>
                       <label class="btn btn-primary btn-sm ">
                         <input type="radio" name="options" id="option1" autocomplete="off" checked> relevant👍<%= comment.relevant_score %>
                       </label>
@@ -49,6 +63,7 @@
                     <button type="button" class=" ml-3 btn btn-warning btn-sm  " data-toggle="button" aria-pressed="false" autocomplete="off">
                       funny😆<%= comment.funny_score %>
                     </button>
+                   
                   </form>
 
                   <!-- <button type="button" class="btn btn-primary btn-sm ">relevant👍<%= comment.relevant_score %></button>
@@ -65,12 +80,17 @@
 
         <!-- User uploaded comment section  -->
 
+    
         <div class=" p-4 mt-2 border bg-light">
 
           <div class="border border-dange mb-2" style="height:5em">
             <h2> Review from your classmates</h5>
 
           </div>
+
+          <% if (typeof currentUser === 'undefined' ){ %>
+            <a href="/login" style="color:inherit; text-decoration:inherit"><div>
+          <%}%>
 
           <form action="/course/<%= course.code %>/new-review" method="post" >
             <div class="form-row align-items-center">
@@ -126,6 +146,11 @@
               <button type="submit" class="btn button-primary mt-4">Add a course review</button>
             </div>
           </form>
+          
+          <% if (typeof currentUser === 'undefined' ){ %>
+          </div></a>
+  
+          <%}%>
 
           
           <% course.course_reviews.forEach(function(review){ %>
@@ -135,8 +160,8 @@
                 <p><%= "User: " + review.author%></p>
                 <p>Usefulness: <%= "★".repeat(review.useful_score) + "☆".repeat(5 - review.useful_score) %></p>
                 <p>Difficulty: <%= "★".repeat(review.difficulty_score) + "☆".repeat(5 - review.difficulty_score)  %></p>
-
               </div>
+
               <div class="col-md-9" >
                 <h5><%= review.title%></h5> 
                 <p><%= review.content %></p>
@@ -158,6 +183,9 @@
 
                              
         </div>
+      
+
+      
 
 
     </div>
