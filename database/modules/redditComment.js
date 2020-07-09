@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 var redditCommentSchema = new mongoose.Schema({
+    title: String,
     content: String,
     url: String,
     relevant_score: Number,

@@ -21,13 +21,13 @@
                   <p>Is Offered Now? <%= course.is_offered_now%></p>
                   <p>Monthly viewed: <%= course.monthly_visit%></p>
                   <p>
-                    Hot Index:  30000
+                    Hot Index:  <%= course.heat%>
                     <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
                     title="What's that" 
                     data-content="Calculated based on # of related posts, replies, and upvotes on UofT reddit">
                     ?</a>
                   </p>
-                  <!-- hot指数 -->
+            
               </div>
             </div>
             <div class="col-md-7 col-12">
@@ -35,7 +35,7 @@
             </div>
         </div>
         <h5>Description:</h5>
-        <p><%= course.description%> Algorithm analysis: worst-case, average-case, and amortized complexity. Expected worst-case complexity, randomized quicksort and selection.</p>
+        <p><%= course.description%> </p>
             
         <hr>
 
@@ -45,14 +45,17 @@
             
               <div class="row">
                 <div class="card-body">
-                  <h5>I am a comment title</h5>
+                  <a class="button-secondary" style="color:#FF4301" href="<%= comment.url %>"><h5>
+                      <i class="fa fa-reddit fa-lg" aria-hidden="true"></i>
+                      &nbsp<%=comment.title %>
+                    </h5></a>
                   <p class="card-text"><%= comment.content %></p>
                   
                   <!-- <p> Not relevent comments? Let us know!</p> -->
 
                   <form>
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                      <a class="button-secondary mr-2" href="<%= comment.url %>">Original Reddit Post</a>
+                  
                       <label class="btn btn-primary btn-sm ">
                         <input type="radio" name="options" id="option1" autocomplete="off" checked> relevant👍<%= comment.relevant_score %>
                       </label>

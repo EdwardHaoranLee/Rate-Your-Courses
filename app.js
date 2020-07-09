@@ -16,8 +16,6 @@ var CourseReview = require('./database/modules/courseReview');
 var OAuth2Data = require('./google_key.json');
 require('./passportSetup');
 
-
-
 // ======= utility =========
 
 app.use(cors());
@@ -37,8 +35,8 @@ app.use(passport.session());
 // ===== CONNECT TO MONGO DB =====
 
 // var url = "mongodb://localhost/rateyourcourses"
-var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
-
+// var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
+var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/rateyourcourses100?retryWrites=true&w=majority";
 
 mongoose.connect(url, {
         useNewUrlParser: true,
@@ -54,7 +52,7 @@ app.locals.userLocation = '';
 
 
 // =======  DANGEROUS ZONE  ==========
-// seedDB();
+seedDB();
 // =======  DANGEROUS ZONE  ==========
 
 
@@ -63,13 +61,15 @@ app.use(function(req, res, next){
 	// 全部多pass一个currentUSer的parameter
 	res.locals.courseSearchError = '';
 	if (req.user){
-		
+		res.locals.currentUser = req.user;
 
-		User.findById(req.user._id).exec(function (err, user){
+		// User.findById(req.user._id).exec(function (err, user){
 
-			res.locals.currentUser = user;
-		});
-	} 
+		// 	res.locals.currentUser = user;
+		// });
+	} else{
+		console.log("no user found wuwuwuwu")
+	}
 
     next();
 });
@@ -146,7 +146,7 @@ app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res)
 
 	var reviewCreated = await CourseReview.create(
 		{
-			author: res.locals.currentUser.username,
+			author: req.user.username,
 			title: response.courseReviewTitle,
 			content:response.courseReview,
 			date: currentDate,
@@ -159,8 +159,10 @@ app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res)
 
 	thisCourse.course_reviews.push(reviewCreated);
 	await thisCourse.save();
-	res.locals.currentUser.posted_reviews.push(reviewCreated);
-	await res.locals.currentUser.save();
+
+	thisUser = await User.findById(req.user._id);
+	thisUser.posted_reviews.push(reviewCreated);
+	await thisUser.save();
 
 	console.log("Thanks I got it");
     res.redirect("/course/" + courseCode);

@@ -9,6 +9,7 @@ var courseSchema = new mongoose.Schema({
     // score2: Number,
     word_cloud: String,
     monthly_visit: Number,
+    heat:Number,
     is_offered_now: Boolean,
     reddit_comments: [
         {
