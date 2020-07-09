@@ -1,7 +1,24 @@
 <%- include("partials/header.ejs") %>
 
-<div class="container">
-    <h1>All Courses:</h1>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h1 >All Courses:</h1>
+    </div>
+    <div class="col-auto">
+      <form class="form-inline" action="/search" method="GET">
+        <div class="form-group m-2 mr-2">
+          <label for="inputCourse" class="sr-only">course code</label>
+          <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="Enter a course code">
+        </div>
+        <button type="submit" class="btn button-primary m-2">Search for course</button>
+      </form>  
+    </div>
+
+  </div>
+
+
 
 
     <table class="table table-hover">
@@ -9,21 +26,34 @@
           <tr>
             <th scope="col">Course</th>
             <th scope="col">Name</th>
-            <th scope="col">Score</th>
-            <th scope="col">BR category</th>
+            <th  scope="col">Sentiment Score
+              <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
+                title="What's this?" 
+                data-content="This score calculated using sentimental analysis based on thousands of relavent posts on UofT reddit ">
+                ?</a>
+            </th>
+
             <th scope="col">Monthly Visit</th>
+            <th scope="col">Hot Index
+              <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
+              title="What's this?" 
+              data-content="Calculated based on # of related posts, replies, and upvotes on UofT reddit">
+              ?</a>
+            </th>
+      
           </tr>
         </thead>
         <tbody>
             <% for (var course of courseList){ %>
-            <tr class="table-row  list-group-item-info" 
+            <tr class="table-row  " 
                 data-href="<%='/course/' + course.code %>">
 
                 <td><%= course.code  %></td>
                 <td><%= course.name  %></td>
                 <td><%= course.score.toFixed(2)  %></td>
-                <td><%= course.br_category %></td>
+        
                 <td><%= course.monthly_visit  %></td>
+                <td>10000</td>
     
             </tr>
             <% } %>
@@ -32,7 +62,6 @@
 
 
 </div>
-
 
 
 

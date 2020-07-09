@@ -1,0 +1,43 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container">
+    <div class="mx-auto m-3 w-50">
+        <h1 class="text-center mt-5">Log in</h1>
+        <h6> Thank you for interested in leaving a comment! To prevent abuse and bots, we have to asking you to log in.</p>
+	
+		<form action="/login" method="POST">
+			<div class="form-group">
+				<label for="inputUserName">User Name</label>
+				<input type="text" id="inputUserName" class="form-control" name="username" placeholder="Username" required>
+			</div>
+			<div class="form-group">
+				<label for="inputPassword">Password</label>
+				<input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            
+        </form> 
+
+        <div class="form-group mt-3 ">
+            <!-- <h6>I know logging in is kinda anoyyihng. but we really value</h6> -->
+            <a href="/login/google">
+                <div class="google-btn" href="/login/google">
+                    <div class="google-icon-wrapper">
+                    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+                    </div>
+                    <p class="google-btn-text"><b>Sign in with google</b></p>
+                </div>
+            </a>
+        </div>
+
+
+
+
+
+		<!-- <a href="/">Go back</a> -->
+	</div>
+	
+
+</div>
+<%- include("partials/footer.ejs") %>
