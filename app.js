@@ -13,9 +13,8 @@ var Course = require('./database/modules/course');
 var User = require('./database/modules/user');
 var RedditComment = require('./database/modules/redditComment');
 var CourseReview = require('./database/modules/courseReview');
-var OAuth2Data = require('./google_key.json');
-require('./passportSetup');
-
+var OAuth2Data = require('./config1/google_key.json');
+require('./config1/passportSetup');
 // ======= utility =========
 
 app.use(cors());
