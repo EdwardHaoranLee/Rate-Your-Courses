@@ -5,7 +5,7 @@ var courseSchema = new mongoose.Schema({
     name: String,
     description: String,
     br_category: Number,
-    score: Number,
+    score: String,
     // score2: Number,
     word_cloud: String,
     monthly_visit: Number,

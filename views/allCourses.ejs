@@ -28,16 +28,16 @@
             <th scope="col">Name</th>
             <th  scope="col">Sentiment Score
               <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
-                title="What's this?" 
-                data-content="This score calculated using sentimental analysis based on thousands of relavent posts on UofT reddit ">
+                title="What's that?" 
+                data-content="Sentiment score is calculated using sentimental analysis based on thousands of relavent posts on UofT reddit ">
                 ?</a>
             </th>
 
             <th scope="col">Monthly Visit</th>
             <th scope="col">Hot Index
               <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
-              title="What's this?" 
-              data-content="Calculated based on # of related posts, replies, and upvotes on UofT reddit">
+              title="What's that?" 
+              data-content="Hot Index is calculated based on # of related posts, replies, and upvotes on UofT reddit">
               ?</a>
             </th>
       
@@ -50,7 +50,12 @@
 
                 <td><%= course.code  %></td>
                 <td><%= course.name  %></td>
-                <td><%= course.score.toFixed(2)  %></td>
+                <% if (course.score == "None"){ %>
+                  <td>n/a</td>
+                <%} else{%>
+                  <td><%= parseFloat(course.score).toFixed(2) %></td>
+                <%}%>
+          
         
                 <td><%= course.monthly_visit  %></td>
                 <td><%= course.heat  %></td>

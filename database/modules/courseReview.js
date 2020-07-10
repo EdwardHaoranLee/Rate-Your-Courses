@@ -9,6 +9,7 @@ var courseReviewSchema = new mongoose.Schema({
     //     username: String,
     // },
     author: String,
+    course: String,
     date: String,
     title: String,
     content: String,

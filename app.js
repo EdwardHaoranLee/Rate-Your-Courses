@@ -52,7 +52,7 @@ app.locals.userLocation = '';
 
 
 // =======  DANGEROUS ZONE  ==========
-seedDB();
+// seedDB();
 // =======  DANGEROUS ZONE  ==========
 
 
@@ -147,6 +147,7 @@ app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res)
 	var reviewCreated = await CourseReview.create(
 		{
 			author: req.user.username,
+			course:courseCode,
 			title: response.courseReviewTitle,
 			content:response.courseReview,
 			date: currentDate,

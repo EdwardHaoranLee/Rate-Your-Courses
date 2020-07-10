@@ -10,10 +10,17 @@
                   <h4>Usefulness: N/A</h3>
                   <h4>Difficulties: N/A</h3>
                   <h4>
-                    Sentiment Score: <%= course.score.toFixed(2)%>
+                    Sentiment Score: 
+                    <% if (course.score == "None"){ %>
+                      n/a
+                    <%} else{%>
+                      <%= parseFloat(course.score).toFixed(2) %>
+                    <%}%>
+                    
+        
                     <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
-                    title="What's this?" 
-                    data-content="This score calculated using sentimental analysis based on thousands of relavent posts on UofT reddit ">
+                    title="What's that'?" 
+                    data-content="Sentiment score calculated using sentimental analysis based on thousands of relavent posts on UofT reddit ">
                     ?</a>
                   </h4>
 
@@ -23,8 +30,8 @@
                   <p>
                     Hot Index:  <%= course.heat%>
                     <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
-                    title="What's that" 
-                    data-content="Calculated based on # of related posts, replies, and upvotes on UofT reddit">
+                    title="What's that?" 
+                    data-content="Hot index is calculated based on # of related posts, replies, and upvotes on UofT reddit">
                     ?</a>
                   </p>
             
