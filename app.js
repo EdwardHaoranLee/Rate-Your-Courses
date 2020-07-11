@@ -47,6 +47,8 @@ db.once('open', function() {console.log("Database connected!")});
 
 //========== state variables ============
 app.locals.userLocation = '';
+app.locals.br= '';
+app.locals.sortby= '';
 
 
 
@@ -66,8 +68,11 @@ app.use(function(req, res, next){
 
 		// 	res.locals.currentUser = user;
 		// });
+		
 	} else{
-		console.log("no user found wuwuwuwu")
+
+		res.locals.currentUser = '';
+
 	}
 
     next();
@@ -81,14 +86,27 @@ app.get("/", function(req, res){
 
     res.render("index",{err: ''});
 });
-app.get("/courses", function(req, res){
-	Course.find().sort('code').exec((err,courseList) => {
-		if(err){
-			console.log(err);
-		} else{
-			res.render("allCourses",{courseList: courseList});
-		}
-	})
+
+
+app.get("/courses", async function(req, res){
+	if(req.query.br){app.locals.br = req.query.br};
+	if(req.query.sortby){app.locals.sortby = req.query.sortby};
+
+
+
+
+	var filteredList = await Course
+	.find(app.locals.br ? {br_category:app.locals.br} : {} )
+	.sort(app.locals.sortby ? 
+		(app.locals.sortby == "code"? app.locals.sortby:'-'+app.locals.sortby)
+		:
+		'heat');
+
+	res.render("allCourses", {courseList: filteredList});
+
+	// res.render("allCourses", {courseList: []});	
+
+
 });
 
 app.get("/about", function(req, res){
@@ -184,6 +202,12 @@ function isLoggedIn(req, res, next){
 
 app.get("/login", function(req,res){
 	res.render("login")
+});
+
+app.get("/logout", function(req,res){
+    req.logout();
+    res.redirect("/courses");
+
 });
 
 app.get('/login/failed', (req, res) => {

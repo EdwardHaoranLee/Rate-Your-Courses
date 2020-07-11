@@ -1,31 +1,65 @@
 <%- include("partials/header.ejs") %>
 
 
-<div class="container mt-5">
+<div class="container">
   <div class="row">
-    <div class="col">
+    <div class="col-md-4 col-12">
       <h1 >All Courses:</h1>
     </div>
-    <div class="col-auto">
+
+    <!-- <div class="col-auto col-12">
       <form class="form-inline" action="/search" method="GET">
         <div class="form-group m-2 mr-2">
           <label for="inputCourse" class="sr-only">course code</label>
           <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="Enter a course code">
         </div>
-        <button type="submit" class="btn button-primary m-2">Search for course</button>
-      </form>  
-    </div>
-
+        <button type="submit" class="btn button-primary m-2">Search</button>
+      </form>   
+    </div> -->
   </div>
 
 
+  <form>
+    <div class="form-row align-items-center">
+      <div class="col-4 col-md-2">
+        <select id="inputSortby" name="sortby" class="form-control">
+          <option value="">  Sort by .. </option>
+          <option value="code"> Course Code</option>
+          <option value="heat"> Popularity</option>
+          <option value="score">Senti. score</option>
+        </select>
+      </div>
+      <div class="col-4 col-md-2">
+        <select id="inputBR" name="br" class="form-control">
+          <option value=""> By BR</option>
+          <option value="1"> BR1 </option>
+          <option value="2"> BR2 </option>
+          <option value="3"> BR3 </option>
+          <option value="4"> BR4 </option>
+          <option value="5"> BR5 </option>
+          <option value=""> All courses </option>
+        </select>
+      </div>
+      <div class="col-2 col-md-auto">
+        <button type="submit" class="btn button-primary m-2">Apply </button>
+      </div>
+    </div>
+  </form>
 
 
-    <table class="table table-hover">
+
+    <% if(true){ %>
+      <div class="alert alert-warning row" role="alert">
+        Loadind filter may take a few seconds
+      </div>
+    <%}%> 
+  
+
+    <table class="table table-hover col-12">
         <thead>
           <tr>
-            <th scope="col">Course</th>
-            <th scope="col">Name</th>
+            <th >Course</th>
+            <th class="d-none d-md-table-cell"  scope="col">Name</th>
             <th  scope="col">Sentiment Score
               <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
                 title="What's that?" 
@@ -33,11 +67,11 @@
                 ?</a>
             </th>
 
-            <th scope="col">Monthly Visit</th>
-            <th scope="col">Hot Index
+            <th class="d-none d-md-table-cell" scope="col">Monthly Visit</th>
+            <th scope="col">Popularity
               <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
               title="What's that?" 
-              data-content="Hot Index is calculated based on # of related posts, replies, and upvotes on UofT reddit">
+              data-content="Popularity Index is calculated based on # of related posts, replies, and upvotes on UofT reddit">
               ?</a>
             </th>
       
@@ -49,21 +83,19 @@
                 data-href="<%='/course/' + course.code %>">
 
                 <td><%= course.code  %></td>
-                <td><%= course.name  %></td>
+                <td class="d-none d-md-table-cell"><%= course.name  %></td>
                 <% if (course.score == "None"){ %>
                   <td>n/a</td>
                 <%} else{%>
                   <td><%= parseFloat(course.score).toFixed(2) %></td>
-                <%}%>
-          
-        
-                <td><%= course.monthly_visit  %></td>
+                <%}%>                 
+                <td class="d-none d-md-table-cell"><%= course.monthly_visit  %></td>
                 <td><%= course.heat  %></td>
     
             </tr>
             <% } %>
         </tbody>
-      </table>
+    </table>
 
 
 </div>

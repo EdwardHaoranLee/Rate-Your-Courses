@@ -12,14 +12,14 @@
           <form  class="in-line" action="/search" method="GET">
             <div class="form-row align-items-center">
               <div class="col-sm-4 my-1">
-                <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="Enter a course code">
+                <input type="text" class="form-control" id="inputCourse" name="enteredCourse" placeholder="Enter a course code" required>
               </div>
 
               <div class="col-sm-3 my-1">
                 <select id="inputCampus" class="form-control">
                   <option selected>St.George campus</option>
-                  <option>UTM (coming soon)</option>
-                  <option>UTSC(coming soon)</option>
+                  <option disabled>UTM (coming soon)</option>
+                  <option disabled>UTSC(coming soon)</option>
                 </select>
               
               </div>
@@ -53,64 +53,87 @@
     <!-- Search section end -->
 
 
-    <div class="container" style="margin-top: 5%;">
+    <div class="container" style="margin-top: 10%;">
       <!-- Trending Courses -->
-      <h1 class="section-header">~ Trending Courses ~</h2>
-      <h6> Based on real-time traffic </h6>
+      <h1 class="section-header"> Trending BR Courses </h2>
+      <h5> Based on 100k+ reddit comments </h5>
         <div class="row ">
+        <!-- list = ['ENG100','CIN105','ENG235','PSY100','PHL245','CLA204'] -->
+
+      
 
           <div class="col-sm-4 my-3">
             <div class="container111">
-              <a href="#">
+              <a href="/course/ENG100">
+                <img class="image111" src="/Wordcloud_image/ENG100.png">
+                <div class="overlay111">
+                  <h3>ENG100</h3>
+                  <h6>Effective Writing</h6>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="/course/CIN105">
+                <img class="image111" src="/Wordcloud_image/CIN105.png">
+                <div class="overlay111">
+                  <h3>CIN105</h3>
+                  <h6>Introduction to Film Study</h6>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="/course/PSY100">
                 <img class="image111" src="/Wordcloud_image/PSY100.png">
-                <div class="overlay111">PSY100 monthly view:128</div>
+                <div class="overlay111">
+                  <h3>PSY100</h3>
+                  <h6>Introductory Psychology</h6>
+                </div>
               </a>
             </div>
           </div>
           <div class="col-sm-4 my-3">
             <div class="container111">
-              <a href="#">
-                <img class="image111" src="/Wordcloud_image/ECO200.png">
-                <div class="overlay111">ECO200</div>
+              <a href="/course/PHL245">
+                <img class="image111" src="/Wordcloud_image/PHL245.png">
+                <div class="overlay111">
+                  <h3>PHL245</h3>
+                  <h6>Modern Symbolic Logic</h6>
+                </div>
               </a>
             </div>
           </div>
           <div class="col-sm-4 my-3">
             <div class="container111">
-              <a href="#">
-                <img class="image111" src="/Wordcloud_image/MAT235.png">
-                <div class="overlay111">MAT235</div>
+              <a href="/course/ECO101">
+                <img class="image111" src="/Wordcloud_image/ECO101.png">
+                <div class="overlay111">
+                  <h3>ECO101</h3>
+                  <h6>Principle of Microeconomics</h6>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-4 my-3">
+            <div class="container111">
+              <a href="/course/SOC100">
+                <img class="image111" src="/Wordcloud_image/SOC100.png">
+                <div class="overlay111">
+                  <h3>SOC100</h3>
+                  <h6>Introduction to Sociology I</h6>
+                </div>
               </a>
             </div>
           </div>
 
-        </div>
-        <div class="row  ">
 
-          <div class="col-sm-4 my-3">
-            <div class="container111">
-              <a href="#">
-                <img class="image111" src="/Wordcloud_image/CSC265.png">
-                <div class="overlay111">CSC265</div>
-              </a>
-            </div>
-          </div>
-          <div class="col-sm-4 my-3">
-            <div class="container111">
-              <a href="#">
-                <img class="image111" src="/Wordcloud_image/ABP100.png">
-                <div class="overlay111">ABP100</div>
-              </a>
-            </div>
-          </div>
-          <div class="col-sm-4 my-3">
-            <div class="container111">
-              <a href="#">
-                <img class="image111" src="/Wordcloud_image/ENV205.png">
-                <div class="overlay111">ENV205</div>
-              </a>
-            </div>
-          </div>
+
+
+
+
 
         </div>
 
@@ -126,7 +149,7 @@
 
 
       <!-- Article Section -->
-      <div class=container>
+      <!-- <div class=container>
         <hr>
         <h1 class="section-header">~ Written by Upper Year Students ~</h2>
         
@@ -162,7 +185,7 @@
             </div>
           </div>
 
-        </div>
+        </div> -->
 
         
 

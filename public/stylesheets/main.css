@@ -1,5 +1,6 @@
 .jumbotron {
     background-image: url(https://static.wixstatic.com/media/a03971_27473bf738b94d799d4e3c64873ac90f~mv2.jpg/v1/fit/w_1024,h_458,al_c,q_80/file.jpg);
+    /* background-image: url(https://cdn.pixabay.com/photo/2017/08/01/01/28/people-2562626_1280.jpg); */
     width:100%;
     padding-top: 20%;
     background-position: center; 
@@ -81,7 +82,7 @@
   color: white;
   font-size: 20px;
 
-  padding: 20px;
+  padding: 5%;
   text-align: center;
 }
 
