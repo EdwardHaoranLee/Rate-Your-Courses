@@ -1,0 +1,42 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container">
+    <div class="mx-auto m-3 w-50">
+        <h1 class="text-center mt-5">Sign Up</h1>
+
+		<form action="/register" method="POST">
+			<div class="form-group">
+				<label for="inputUserName">User Name</label>
+				<input type="text" id="inputUserName" class="form-control" name="username" placeholder="User Name" required>
+            </div>
+            
+			<div class="form-group">
+				<label for="inputDisplayName">Display Name</label>
+				<input type="text" id="inputDisplayName" class="form-control" name="displayName" placeholder="Display name" required>
+			</div>
+			<div class="form-group">
+				<label for="inputPassword">Password</label>
+				<input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+            </div>
+
+            <% if(err){ %>
+                <div class="alert alert-warning my-2" role="alert">
+                  <%= err%>
+                </div>
+            <%}%> 
+
+            <button type="submit" class="btn button-primary btn-block">Sign Up!</button>
+            
+        </form>
+
+
+
+
+
+
+		<!-- <a href="/">Go back</a> -->
+	</div>
+	
+
+</div>
+<%- include("partials/footer.ejs") %>

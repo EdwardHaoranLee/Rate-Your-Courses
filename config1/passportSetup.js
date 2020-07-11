@@ -1,24 +1,42 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+var LocalStrategy = require('passport-local');
 var User = require('../database/modules/user');
 
+// passport.use(User.createStrategy());
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+
 passport.serializeUser(function(user, done) {
-    /*
-    From the user take just the id (to minimize the cookie size) and just pass the id of the user
-    to the done callback
-    PS: You dont have to do it like this its just usually done like this
-    */
+
     done(null, user);
   });
   
 passport.deserializeUser(function(user, done) {
-    /*
-    Instead of user this function usually recives the id 
-    then you use the id to select the user from the db and pass the user obj to the done callback
-    PS: You can later access this data in any routes in: req.user
-    */
+
     done(null, user);
 });
+
+
+
+// passport.use(new LocalStrategy(
+//   function(username, password, done) {
+//     User.findOne({ username: username }, function (err, user) {
+//       if (err) { return done(err); }
+//       if (!user) {
+//         return done(null, false, { message: 'Incorrect username.' });
+//       }
+//       if (!user.validPassword(password)) {
+//         return done(null, false, { message: 'Incorrect password.' });
+//       }
+//       return done(null, user);
+//     });
+//   }
+// ));
+// 
 
 passport.use(new GoogleStrategy({
     clientID: "749281041176-lk4mg3p4d298u7olu6j3cuj3ao6mbd8q.apps.googleusercontent.com",
@@ -37,7 +55,7 @@ passport.use(new GoogleStrategy({
             console.log("new user");
            User.create({
              googleId:profile.id,
-             username: profile.displayName,
+             displayName: profile.displayName,
              posted_reviews:[] 
            },function (err, user) {
             return done(err, user);

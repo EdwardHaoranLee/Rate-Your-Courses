@@ -40,16 +40,16 @@
         <div class="collapse navbar-collapse">
 
           <ul class="navbar-nav ml-auto">
-            <% if(currentUser){ %>
+            <% if (typeof currentUser === 'undefined' ){ %>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+              </li>              
+            <% } else{ %>
               <li class="nav-item">
                 <a class="nav-link active" >Welcome: <%= currentUser.username %></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Log out</a>
-              </li>
-            <% } else{ %>
-              <li class="nav-item">
-              <a class="nav-link" href="/login">Login</a>
               </li>
             <%} %>
            

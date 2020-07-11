@@ -2,9 +2,10 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
-var { google } = require('googleapis');
+// var { google } = require('googleapis');
 var cors = require('cors');
 var passport = require('passport');
+
 var cookieParser = require('cookie-parser');
 
 
@@ -15,10 +16,28 @@ var RedditComment = require('./database/modules/redditComment');
 var CourseReview = require('./database/modules/courseReview');
 var OAuth2Data = require('./config1/google_key.json');
 require('./config1/passportSetup');
+
+
+// ===== CONNECT TO MONGO DB =====
+
+// var url = "mongodb://localhost/rateyourcourses"
+// var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
+var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/rateyourcourses100?retryWrites=true&w=majority";
+
+mongoose.connect(url, {
+        useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useCreateIndex: true});
+
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {console.log("Database connected!")});
+
 // ======= utility =========
 
 app.use(cors());
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
@@ -30,30 +49,18 @@ app.use(require("express-session")({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-// ===== CONNECT TO MONGO DB =====
-
-// var url = "mongodb://localhost/rateyourcourses"
-// var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
-var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/rateyourcourses100?retryWrites=true&w=majority";
-
-mongoose.connect(url, {
-        useNewUrlParser: true,
-		useUnifiedTopology: true,});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {console.log("Database connected!")});
+// passportSetup();
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 //========== state variables ============
 app.locals.userLocation = '';
 app.locals.br= '';
 app.locals.sortby= '';
 
-
-
 // =======  DANGEROUS ZONE  ==========
-seedDB();
+// seedDB();
 // =======  DANGEROUS ZONE  ==========
 
 
@@ -71,7 +78,7 @@ app.use(function(req, res, next){
 		
 	} else{
 
-		res.locals.currentUser = '';
+
 
 	}
 
@@ -199,9 +206,31 @@ function isLoggedIn(req, res, next){
     res.redirect("/login");
 };
 
+app.get("/register", function(req, res){
+    res.render("register", {err: ''}); 
+ });
+
+app.post("/register", function(req, res){
+    // 新user object只装有username
+    var newUser = new User({
+		username: req.body.username,
+		displayName: req.body.displayName,
+		posted_reviews: [],
+	});
+	console.log(newUser);
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            res.render("register",{err: err});
+        }
+        passport.authenticate("local")(req, res, function(){
+           res.redirect("/login/success"); 
+        });
+    });
+});
+
 
 app.get("/login", function(req,res){
-	res.render("login")
+	res.render("login", {err: ""});
 });
 
 app.get("/logout", function(req,res){
@@ -211,17 +240,25 @@ app.get("/logout", function(req,res){
 });
 
 app.get('/login/failed', (req, res) => {
-	res.send('You Failed to log in!')});
+
+	res.render("login", {err:"Log in fail, please try again."});
+});
 
 // In this route you can see that if the user is logged in u can acess his info in: req.user
 app.get('/login/success', isLoggedIn, (req, res) => {
 
-
 	console.log(req.user);
-
 	res.redirect( req.app.locals.userLocation || '/');
 
 });
+
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/login/success",
+        failureRedirect: "/login/failed"
+    }), function(req, res){
+});
+
 
 
 app.get("/login/google", passport.authenticate('google', { scope: ['profile', 'email'] })

@@ -8,16 +8,24 @@
 		<form action="/login" method="POST">
 			<div class="form-group">
 				<label for="inputUserName">User Name</label>
-				<input type="text" id="inputUserName" class="form-control" name="username" placeholder="Username" required>
-			</div>
+				<input type="text" id="inputUserName" class="form-control" name="useraame" placeholder="User Name" required>
+            </div> 
 			<div class="form-group">
 				<label for="inputPassword">Password</label>
 				<input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            <% if(err){ %>
+                <div class="alert alert-warning my-2" role="alert">
+                  <%= err%>
+                </div>
+            <%}%> 
+
+            <button type="submit" class="btn button-primary btn-block">Submit</button>
+            <a href="/register" class="btn button-primary btn-block">Don't have an account? Register now!</a>
             
-        </form> 
+        </form>
+
 
         <div class="form-group mt-3 ">
             <!-- <h6>I know logging in is kinda anoyyihng. but we really value</h6> -->
