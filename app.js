@@ -53,7 +53,7 @@ app.locals.sortby= '';
 
 
 // =======  DANGEROUS ZONE  ==========
-// seedDB();
+seedDB();
 // =======  DANGEROUS ZONE  ==========
 
 

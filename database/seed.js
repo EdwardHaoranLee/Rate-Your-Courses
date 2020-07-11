@@ -2,21 +2,15 @@
 var mongoose = require('mongoose');
 var Course = require('./modules/course');
 var RedditComment = require('./modules/redditComment');
-var data = require('./database(3).json');
+var data = require('./database.json');
 
 async function seedDB(){
-    // 清空全部course 
-    // await RedditComment.deleteMany({});
-    // console.log("All comments removed from Database!");
-    // await Course.deleteMany({});
-    // console.log("All courses removed from Database!");
 
 
-    
     for (var courseKey in data){
         var thisCourse = await Course.findOne({ code: courseKey });
         if (!thisCourse){
-
+            console.log("Found new course:" + courseKey);
             try{
                 let course = await Course.create(
                     {
