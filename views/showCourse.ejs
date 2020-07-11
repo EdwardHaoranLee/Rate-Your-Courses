@@ -1,5 +1,7 @@
 <%- include("partials/header.ejs") %>
 
+
+
     <div class="container mt-5">
         <div class="row">
             <!-- course name and score -->
@@ -59,25 +61,31 @@
                   
                   <!-- <p> Not relevent comments? Let us know!</p> -->
 
-                  <form>
+                  
+                  <form action="/<%= comment._id %>/reddit/like" method="POST">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                   
-                      <label class="btn btn-primary btn-sm ">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked> relevant👍<%= comment.relevant_score %>
+                      <label class="btn btn-outline-primary btn-sm ">
+                        <input class="reddit_like_btn" type="radio" name="relevant_score" data-comment_id= id="<%= comment._id %>" id="reddit_relevant_btn" autocomplete="off" >
+                         relevant👍<%= comment.relevant_score %>
                       </label>
-                      <label class="btn btn-secondary btn-sm">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> not relevant👎<%= comment.nonrelevant_score %>
+                      <label class="btn btn-outline-secondary btn-sm">
+                        <input class="reddit_like_btn" type="radio" name="nonrelevant_score" data-comment_id= id="<%= comment._id %>"  id="reddit_nonrelevant_btn" autocomplete="off">
+                         not relevant👎<%= comment.nonrelevant_score %>
                       </label>
                     </div>
                     <button type="button" class=" ml-3 btn btn-warning btn-sm  " data-toggle="button" aria-pressed="false" autocomplete="off">
                       funny😆<%= comment.funny_score %>
                     </button>
-                   
+
+                    <button type="submit" class="btn button-primary mt-4">submit</button>
+                  
+                    
                   </form>
 
-                  <!-- <button type="button" class="btn btn-primary btn-sm ">relevant👍<%= comment.relevant_score %></button>
-                  <button type="button" class="btn btn-secondary btn-sm ">not relevant👎<%= comment.nonrelevant_score %></button>
-                  <button type="button" class="btn btn-warning btn-sm ">funny😆<%= comment.funny_score %></button> -->
+
+
+
                   <hr>
                 </div>
               </div>
@@ -102,7 +110,7 @@
             <a href="/login" style="color:inherit; text-decoration:inherit"><div>
           <%}%>
 
-          <form action="/course/<%= course.code %>/new-review" method="post" >
+          <form id="redditLikeForm" action="/course/<%= course.code %>/new-review" method="post" >
             <div class="form-row align-items-center">
       
                 <div class="col-md-3 my-1">
@@ -199,6 +207,48 @@
 
 
     </div>
+
+    <script>
+    $( document ).ready(function() {
+      $('.reddit_like_btn').change(function() {
+
+        var $button = $( this );
+        var commentId = $button.data( 'comment_id' )
+        var valueChange = $button.val() == 'on'? 1: -1;
+        var isRelevant = ($button.attr('name') == 'relevant_score');
+        var data = {
+          'isRelevant' : isRelevant,
+          'valueChange': valueChange,
+          };
+        console.log(commentId);
+        console.log(valueChange);
+        console.log(isRelevant);
+        console.log(data);
+   
+        // $.post("/" + commentId + "/reddit/like", data, function(resp){
+        //   alert(resp);
+        // });
+
+        $.ajax({
+          type : "POST",
+          url : "/" + commentId + "/reddit/like",
+          data : data,
+          success : function(customer) {
+            console.log("success!")
+          },
+          error : function(e) {
+
+            console.log("ERROR: ", e);
+          }
+        });
+
+
+      });
+
+    });
+
+
+    </script>
 
 <%- include("partials/footer.ejs") %>
       

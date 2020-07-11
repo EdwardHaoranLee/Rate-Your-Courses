@@ -18,6 +18,7 @@ var OAuth2Data = require('./config1/google_key.json');
 require('./config1/passportSetup');
 
 
+
 // ===== CONNECT TO MONGO DB =====
 
 // var url = "mongodb://localhost/rateyourcourses"
@@ -64,7 +65,7 @@ app.locals.sortby= '';
 // =======  DANGEROUS ZONE  ==========
 
 
-// ======= MIDDLEWARE ===
+// ======= LOAD USER INFO ===
 app.use(function(req, res, next){
 	// 全部多pass一个currentUSer的parameter
 	res.locals.courseSearchError = '';
@@ -73,7 +74,7 @@ app.use(function(req, res, next){
 
 		// User.findById(req.user._id).exec(function (err, user){
 
-		// 	res.locals.currentUser = user;
+
 		// });
 		
 	} else{
@@ -118,7 +119,9 @@ app.get("/courses", async function(req, res){
 
 app.get("/about", function(req, res){
     res.render("about");
+    // res.redirect("/");
 });
+
 app.get("/privacy-policy", function(req, res){
     res.render("privacyPolicy");
 });
@@ -135,7 +138,6 @@ app.get("/search", function(req, res){
 
 app.get("/course/:courseCode", function(req, res){
     var courseCode = req.params.courseCode;
-	// var thisCourse = data[courseCode];
 	Course.findOne({ code: courseCode })
 	.populate("reddit_comments")
 	.populate("course_reviews")
@@ -149,6 +151,26 @@ app.get("/course/:courseCode", function(req, res){
 			thisCourse.monthly_visit++;
 			await thisCourse.save();
 			req.app.locals.userLocation = '/course/' + courseCode;
+
+			if (req.user){
+
+				var thisUser = await User.findById(req.user._id).populate({
+					path: 'voted_reddit',
+					populate: { path: 'vote_comment' }
+				});
+
+				var likedList = thisUser.voted_reddit.filter(vote => {
+					return thisCourse.reddit_comments.indexOf(vote.vote_comment) != -1;
+					// return thisCourse.reddit_comments.include(vote.vote_comment);
+				})
+
+				console.log(likedList)
+
+				res.render("showCourse", {course:thisCourse,likedList: likedList});
+			// res.render("showCourse", {course:thisCourse});
+
+			} else
+
 			res.render("showCourse", {course:thisCourse});
 		};
 	});
@@ -194,11 +216,74 @@ app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res)
 });
 
 
+// ======= LIke a reddit post ======
+app.post("/:commentId/reddit/like", isLoggedIn, async function (req, res) {
+
+
+	console.log("I finnaly got Ajax?!" + req.params.commentId);
+	var thisComment = await RedditComment.findById(req.params.commentId);
+	console.log("this comment is " + thisComment);
+
+	
+	if (!thisComment){
+		res.redirect( req.app.locals.userLocation );
+	}
+	var thisUser = await User.findById(req.user._id).populate("voted_reddit");
+	console.log("this user is " + thisUser);
+
+
+	// check like?
+	// var isLiked = thisUser.voted_reddit.filter(comment => {
+	// 	return comment._id == req.params.commentId});
+	
+	var isRelevant = req.body.relevant_score == 'on';      // relevant, nonrelevant
+	console.log("response is " + req.body.revelant_score);
+	var newVotedReddit = {
+		is_relevant: isRelevant,
+		vote_comment: thisComment,
+	}
+	
+	await thisUser.voted_reddit.push(newVotedReddit);
+	await thisUser.save();
+	if (isRelevant){          // relevant
+		thisComment.relevant_score ++;
+	} else{ // non relevant
+		thisComment.nonrelevant_score ++;
+	}
+	await thisComment.save();
+
+	console.log(req.body);
+
+	res.redirect(req.app.locals.userLocation);
+
+//         // check if req.user._id exists in foundCampground.likes
+//         var foundUserLike = foundCampground.likes.some(function (like) {
+//             return like.equals(req.user._id);
+//         });
+
+//         if (foundUserLike) {
+//             // user already liked, removing like
+//             foundCampground.likes.pull(req.user._id);
+//         } else {
+//             // adding the new user like
+//             foundCampground.likes.push(req.user);
+//         }
+
+//         foundCampground.save(function (err) {
+//             if (err) {
+//                 console.log(err);
+//                 return res.redirect("/campgrounds");
+//             }
+//             return res.redirect("/campgrounds/" + foundCampground._id);
+//         });
+//     });
+});
+
+
 // ============= AUTHENTICATION ==============
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
-		console.log("yes you logged in!")
         return next();
 	}
 	console.log("no you dint");
@@ -216,6 +301,7 @@ app.post("/register", function(req, res){
 		username: req.body.username,
 		displayName: req.body.displayName,
 		posted_reviews: [],
+		voted_reddit:[],
 	});
 	console.log(newUser);
     User.register(newUser, req.body.password, function(err, user){

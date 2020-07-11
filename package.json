@@ -17,6 +17,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "googleapis": "^52.1.0",
+    "jquery": "^3.5.1",
+    "jsdom": "^16.3.0",
     "mongoose": "^5.9.21",
     "nodemon": "^2.0.4",
     "passport": "^0.4.1",
