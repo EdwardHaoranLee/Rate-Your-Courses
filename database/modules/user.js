@@ -12,17 +12,12 @@ var userSchema = new mongoose.Schema({
             ref: "CourseReview",
         }
     ],
-    voted_reddit: [
+    voted_reddit: [     
         {
-            is_relevant: Boolean,
-            vote_comment:        
-                {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "RedditComment",
-                }
-            
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "RedditComment",
         }
-    ]
+    ],
 });
 
 userSchema.plugin(passportLocalMongoose);

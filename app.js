@@ -179,6 +179,8 @@ app.get("/course/:courseCode", function(req, res){
 
 // ====== posting comments =========
 app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res){
+	
+
 	var courseCode = req.params.courseCode;
 	
 	var response = req.body;
@@ -217,42 +219,22 @@ app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res)
 
 
 // ======= LIke a reddit post ======
-app.post("/:commentId/reddit/like", isLoggedIn, async function (req, res) {
+app.post("/:commentId/reddit/report",isLoggedIn, async function (req, res) {
 
-
-	console.log("I finnaly got Ajax?!" + req.params.commentId);
 	var thisComment = await RedditComment.findById(req.params.commentId);
 	console.log("this comment is " + thisComment);
-
-	
-	if (!thisComment){
-		res.redirect( req.app.locals.userLocation );
-	}
 	var thisUser = await User.findById(req.user._id).populate("voted_reddit");
-	console.log("this user is " + thisUser);
-
-
-	// check like?
-	// var isLiked = thisUser.voted_reddit.filter(comment => {
-	// 	return comment._id == req.params.commentId});
-	
-	var isRelevant = req.body.relevant_score == 'on';      // relevant, nonrelevant
-	console.log("response is " + req.body.revelant_score);
-	var newVotedReddit = {
-		is_relevant: isRelevant,
-		vote_comment: thisComment,
-	}
-	
-	await thisUser.voted_reddit.push(newVotedReddit);
+	await thisUser.voted_reddit.push(thisComment);
 	await thisUser.save();
-	if (isRelevant){          // relevant
+
+	console.log('what is this???' + req.body.isRelevant);
+	if (req.body.isRelevant){
 		thisComment.relevant_score ++;
-	} else{ // non relevant
+	} else{
 		thisComment.nonrelevant_score ++;
 	}
 	await thisComment.save();
 
-	console.log(req.body);
 
 	res.redirect(req.app.locals.userLocation);
 
