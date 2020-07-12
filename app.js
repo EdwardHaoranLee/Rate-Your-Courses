@@ -57,7 +57,7 @@ app.use(passport.session());
 
 //========== state variables ============
 app.locals.userLocation = '';
-app.locals.br= '';
+app.locals.br= "all";
 app.locals.sortby= '';
 
 // =======  DANGEROUS ZONE  ==========
@@ -97,14 +97,15 @@ app.get("/", function(req, res){
 
 
 app.get("/courses", async function(req, res){
+	// console.log("req is " + req.query.br);
 	if(req.query.br){app.locals.br = req.query.br};
 	if(req.query.sortby){app.locals.sortby = req.query.sortby};
 
+	// console.log("is empty true?" + ('' == true));
 
-
-
+	// console.log("local is " + app.locals.br);
 	var filteredList = await Course
-	.find(app.locals.br ? {br_category:app.locals.br} : {} )
+	.find(app.locals.br == "all" ?  {} :{br_category:app.locals.br})
 	.sort(app.locals.sortby ? 
 		(app.locals.sortby == "code"? app.locals.sortby:'-'+app.locals.sortby)
 		:
@@ -144,7 +145,6 @@ app.get("/course/:courseCode", function(req, res){
 	.exec( async function (err, thisCourse) {
 		if(!thisCourse){
 
-			// res.redirect("/", );
 		
 			res.render("index", {err: "this is not a UofT course, please try again" })
 		} else {
@@ -154,24 +154,37 @@ app.get("/course/:courseCode", function(req, res){
 
 			if (req.user){
 
-				var thisUser = await User.findById(req.user._id).populate({
-					path: 'voted_reddit',
-					populate: { path: 'vote_comment' }
+				var thisUser = await User.findById(req.user._id).populate("voted_reddit");
+				var likedList = [];
+				await thisCourse.reddit_comments.forEach(redditComment => {
+					console.log("reddit comment is " + redditComment._id );
+					console.log("type" + typeof(redditComment._id));
+					
+					thisUser.voted_reddit.forEach(votedComment => {
+						
+						console.log("user comment is " + votedComment._id );
+						console.log("type" + typeof(votedComment._id));
+						if (votedComment._id.equals(redditComment._id)){
+						// if (redditComment._id == votedComment._id){
+							likedList.push(redditComment);
+						}
+					})
+
+					
 				});
 
-				var likedList = thisUser.voted_reddit.filter(vote => {
-					return thisCourse.reddit_comments.indexOf(vote.vote_comment) != -1;
-					// return thisCourse.reddit_comments.include(vote.vote_comment);
-				})
 
-				console.log(likedList)
+
+				console.log("liked list should be " + likedList);
 
 				res.render("showCourse", {course:thisCourse,likedList: likedList});
-			// res.render("showCourse", {course:thisCourse});
 
-			} else
 
-			res.render("showCourse", {course:thisCourse});
+			} else{
+				res.render("showCourse", {course:thisCourse});
+			}
+
+			
 		};
 	});
 
@@ -222,16 +235,15 @@ app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res)
 app.post("/:commentId/reddit/report",isLoggedIn, async function (req, res) {
 
 	var thisComment = await RedditComment.findById(req.params.commentId);
-	console.log("this comment is " + thisComment);
-	var thisUser = await User.findById(req.user._id).populate("voted_reddit");
+	var thisUser = await User.findById(req.user._id);
 	await thisUser.voted_reddit.push(thisComment);
 	await thisUser.save();
 
-	console.log('what is this???' + req.body.isRelevant);
-	if (req.body.isRelevant){
+
+	if (req.body.isRelevant == 'true'){
 		thisComment.relevant_score ++;
 	} else{
-		thisComment.nonrelevant_score ++;
+		thisComment.nonrelevant_score = 1000 ;
 	}
 	await thisComment.save();
 

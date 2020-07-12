@@ -60,9 +60,29 @@
                   <p class="card-text"><%= comment.content %></p>
                   
                   <!-- <p> Not relevent comments? Let us know!</p> -->
+                 <!-- 为了绕过ajax简单粗暴做了visitor/login version -->
+
+                  <% if (typeof currentUser === 'undefined' ){ %>
+                    <form >
+                      <div>
+                        <label class="btn btn-outline-primary btn-sm ">
+                          <a href="/login" style="color:inherit; " autocomplete="off" >
+                          relevant👍<%= comment.relevant_score %></a>
+                        </label>
+                        <label class="btn btn-outline-secondary btn-sm">
+                          <a href="/login" style="color:inherit;" autocomplete="off">
+                          not relevant👎<%= comment.nonrelevant_score %></a>
+                        </label>
+                      </div> 
+                  </form>
+                 
+
+                  <%} else{%>
+            
+
 
                   
-                  <form>
+                  <form class="feedback_form">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                   
                       <label class="btn btn-outline-primary btn-sm ">
@@ -74,11 +94,16 @@
                          not relevant👎<%= comment.nonrelevant_score %>
                       </label>
                     </div>
-
-                    <button type="submit" class="btn button-primary mt-4">submit</button>
-                  
-                    
+                
                   </form>
+                  <div  class="submission_msg alert alert-info sm" style="width: 250px; display:none" role="alert">
+                    Thank you for the feedback! 
+                  </div>
+                  
+
+
+          
+                  <%}%>
 
 
 
@@ -213,6 +238,18 @@
         var commentId = $button.data( 'comment_id' )
         var isRelevant = ($button.attr('name') == 'relevant_score');
 
+        var $toHideForm = $(this).parents(".feedback_form");
+
+        $toHideForm.hide();
+        $toHideForm.next().fadeIn(500);
+
+
+
+
+        // $(this).parents(".feedback_form").hide();
+        
+     
+
 
         $.ajax({
           type : "POST",
@@ -223,6 +260,7 @@
           },
           error : function(e) {
 
+            console.log("NOT success!")
             console.log("ERROR: ", e);
           }
         });
