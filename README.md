@@ -20,6 +20,9 @@ This repository contains:
     - [Word frequency and word cloud](word-frequency-and-word-cloud)
     - [Course score](#course-score)
 - [Webpage Implementation](#Webpage-implementation)
+    - Frontend:  Ejs, Bootstrap, CSS, Jquery, Ajax
+    - Backend: Node.js, Express.js, MongoDB, Mongoose
+    - Other technologies: Heroku(deployment), AWS(coming soon)
 
 ## Background
 
