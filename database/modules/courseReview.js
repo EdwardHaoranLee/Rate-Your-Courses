@@ -15,6 +15,7 @@ var courseReviewSchema = new mongoose.Schema({
     content: String,
     useful_score: Number,
     difficulty_score: Number,
+    interesting_score:Number,
     for_br: Boolean,
     upvote: Number,
     downvote: Number,

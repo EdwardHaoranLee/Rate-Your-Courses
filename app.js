@@ -143,14 +143,14 @@ app.get("/feedback", function(req, res){
 		service: 'gmail',
 		auth: {
 		  user: 'jasminesun.ryc@gmail.com',
-		  pass: process.env.RYC_EMAIL_PASSWORD,
+		  pass: process.env.RYC_EMAIL_PASSWORD || 'rateyourcourses',
 		}
 	  });
 	  var mailOptions = {
 		from: email,
 		to: 'jasminesun.ryc@gmail.com',
 		subject: '[RYC]Feedback from Users',
-		text: feedback
+		text: "email:     " + email+ "     content:" + feedback
 	  };
 	  transporter.sendMail(mailOptions, function(error, info){
 		if (error) {
