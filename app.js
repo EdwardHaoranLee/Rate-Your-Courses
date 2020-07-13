@@ -25,9 +25,8 @@ var nodemailer = require('nodemailer');
 // ===== CONNECT TO MONGO DB =====
 
 // var url = "mongodb://localhost/rateyourcourses"
-// var url_testing = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
-var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/rateyourcourses100?retryWrites=true&w=majority";
-// var url123 = "mongodb+srv://admin:<password>@cluster0.1cbyy.mongodb.net/<dbname>?retryWrites=true&w=majority"
+var url_testing = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
+var url = process.env.MONGO_URL || url_testing 
 
 mongoose.connect(url, {
         useNewUrlParser: true,
