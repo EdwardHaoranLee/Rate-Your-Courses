@@ -16,6 +16,9 @@ var RedditComment = require('./database/modules/redditComment');
 var CourseReview = require('./database/modules/courseReview');
 var OAuth2Data = require('./config1/google_key.json');
 require('./config1/passportSetup');
+var nodemailer = require('nodemailer');
+
+
 
 
 
@@ -136,6 +139,36 @@ app.get("/search", function(req, res){
 		res.redirect("/");
 	}
 });
+app.get("/feedback", function(req, res){
+	console.log("here?");
+    var email = req.query.email;
+	var feedback = req.query.feedback;
+	var transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: {
+		  user: 'jasminesun.ryc@gmail.com',
+		  pass: 'rateyourcourses'
+		}
+	  });
+	  
+	  var mailOptions = {
+		from: email,
+		to: 'jasminesun.ryc@gmail.com',
+		subject: '[RYC]Feedback from Users',
+		text: feedback
+	  };
+	  
+	  transporter.sendMail(mailOptions, function(error, info){
+		if (error) {
+		  console.log(error);
+		} else {
+		  console.log('Email sent: ' + info.response);
+		}
+	  });
+	
+	res.send("Thank you for you feedback! Hope you have a great day😊")
+
+});
 
 app.get("/course/:courseCode", function(req, res){
     var courseCode = req.params.courseCode;
@@ -240,10 +273,13 @@ app.post("/:commentId/reddit/report",isLoggedIn, async function (req, res) {
 	await thisUser.save();
 
 
-	if (req.body.isRelevant == 'true'){
+	if (req.body.isRelevant == 'relevant_score'){
 		thisComment.relevant_score ++;
-	} else{
-		thisComment.nonrelevant_score = 1000 ;
+	} else if (req.body.isRelevant == 'nonrelevant_score') {
+		thisComment.nonrelevant_score ++ ;
+	}
+	else{
+		thisComment.funny_score ++ ;
 	}
 	await thisComment.save();
 

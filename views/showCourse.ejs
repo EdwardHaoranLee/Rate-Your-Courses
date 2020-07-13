@@ -8,10 +8,10 @@
             <div class="col-md-5 col-12">
               <div>
                   <h1>Course: <%= course.code%></h1>
-                  <h3><%= course.name%></h3>
-                  <h4>Usefulness: N/A</h3>
-                  <h4>Difficulties: N/A</h3>
-                  <h4>
+                  <h4><%= course.name%></h4>
+                  <h5>Usefulness: N/A</h5>
+                  <h5>Difficulties: N/A</h5>
+                  <h5>
                     Sentiment Score: 
                     <% if (course.score == "None"){ %>
                       n/a
@@ -23,10 +23,10 @@
                     title="What's that'?" 
                     data-content="Sentiment score calculated using sentimental analysis based on thousands of relavent posts on UofT reddit ">
                     ?</a>
-                  </h4>
+                  </h5>
 
                   <p>BR: <%= course.br_category%></p>
-                  <p>Is Offered Now? <%= course.is_offered_now%></p>
+              
                   <p>Monthly viewed: <%= course.monthly_visit%></p>
                   <p>
                     Popularity:  <%= course.heat%>
@@ -78,9 +78,8 @@
                  
 
                   <%} else{%>
-            
 
-
+        
                   
                   <form class="feedback_form">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -92,6 +91,10 @@
                       <label class="btn btn-outline-secondary btn-sm">
                         <input class="reddit_like_btn" type="radio" name="nonrelevant_score" data-comment_id="<%= comment._id %>"  id="reddit_nonrelevant_btn" autocomplete="off">
                          not relevant👎<%= comment.nonrelevant_score %>
+                      </label>
+                      <label class="btn btn-outline-warning btn-sm">
+                        <input class="reddit_like_btn" type="radio" name="funny_score" data-comment_id="<%= comment._id %>"  id="reddit_nonrelevant_btn" autocomplete="off">
+                         kind of relevant 🤔 <%= comment.funny_score %>
                       </label>
                     </div>
                 
@@ -236,7 +239,7 @@
 
         var $button = $( this );
         var commentId = $button.data( 'comment_id' )
-        var isRelevant = ($button.attr('name') == 'relevant_score');
+        var isRelevant = ($button.attr('name'));
 
         var $toHideForm = $(this).parents(".feedback_form");
 
