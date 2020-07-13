@@ -37,6 +37,7 @@ mongoose.connect(url, {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {console.log("Database connected!")});
+seedDB();
 
 // ======= utility =========
 
@@ -63,9 +64,12 @@ app.locals.userLocation = '';
 app.locals.br= "all";
 app.locals.sortby= '';
 
-// =======  DANGEROUS ZONE  ==========
-// seedDB();
-// =======  DANGEROUS ZONE  ==========
+
+
+
+
+
+
 
 
 // ======= LOAD USER INFO ===
@@ -190,13 +194,10 @@ app.get("/course/:courseCode", function(req, res){
 				var thisUser = await User.findById(req.user._id).populate("voted_reddit");
 				var likedList = [];
 				await thisCourse.reddit_comments.forEach(redditComment => {
-					console.log("reddit comment is " + redditComment._id );
-					console.log("type" + typeof(redditComment._id));
+
 					
 					thisUser.voted_reddit.forEach(votedComment => {
 						
-						console.log("user comment is " + votedComment._id );
-						console.log("type" + typeof(votedComment._id));
 						if (votedComment._id.equals(redditComment._id)){
 						// if (redditComment._id == votedComment._id){
 							likedList.push(redditComment);
@@ -207,8 +208,6 @@ app.get("/course/:courseCode", function(req, res){
 				});
 
 
-
-				console.log("liked list should be " + likedList);
 
 				res.render("showCourse", {course:thisCourse,likedList: likedList});
 
