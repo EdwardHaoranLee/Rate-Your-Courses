@@ -26,9 +26,9 @@ var nodemailer = require('nodemailer');
 
 // var url = "mongodb://localhost/rateyourcourses"
 var url_testing = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
-var url = process.env.MONGO_URL || url_testing 
-
-mongoose.connect(url, {
+// var url = process.env.MONGO_URL || url_testing 
+var url888 = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/rateyourcourses100?retryWrites=true&w=majority";
+mongoose.connect(url888, {
         useNewUrlParser: true,
 		useUnifiedTopology: true,
 		useCreateIndex: true});
