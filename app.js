@@ -246,6 +246,7 @@ app.post("/course/:courseCode/new-review", isLoggedIn,  async function(req, res)
 			date: currentDate,
 			useful_score: response.usefulness,
 			difficulty_score: response.difficulty,
+			interesting_score: response.interesting,
 			for_br: response.br,
 			upvote:0,
 			downvote:0,
@@ -283,7 +284,8 @@ app.post("/:commentId/reddit/report",isLoggedIn, async function (req, res) {
 	await thisComment.save();
 
 
-	res.redirect(req.app.locals.userLocation);
+	res.redirect('/courses');
+	// res.redirect(req.app.locals.userLocation);
 
 //         // check if req.user._id exists in foundCampground.likes
 //         var foundUserLike = foundCampground.likes.some(function (like) {

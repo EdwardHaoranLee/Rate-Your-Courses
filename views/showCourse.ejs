@@ -9,8 +9,10 @@
               <div>
                   <h1>Course: <%= course.code%></h1>
                   <h4><%= course.name%></h4>
-                  <h5>Usefulness: N/A</h5>
-                  <h5>Difficulties: N/A</h5>
+      
+                  <h5>Usefulness: <%= course.getUsefulness()%></h5>
+                  <h5>Difficulties:<%= course.getDifficulty()%></h5>
+                  <h5>Interesting:<%= course.getInteresting()%></h5>
                   <h5>
                     Sentiment Score: 
                     <% if (course.score == "None"){ %>
@@ -94,7 +96,7 @@
                       </label>
                       <label class="btn btn-outline-warning btn-sm">
                         <input class="reddit_like_btn" type="radio" name="funny_score" data-comment_id="<%= comment._id %>"  id="reddit_nonrelevant_btn" autocomplete="off">
-                         kind of relevant 🤔 <%= comment.funny_score %>
+                         good to know 🤔 <%= comment.funny_score %>
                       </label>
                     </div>
                 
@@ -164,11 +166,23 @@
               </div>
 
               <div class="col-md-3 my-1">
-                <label for="inputBR">Taking it as BR?</label>
+                <label for="inputInteresting">Interesting</label>
+                <select id="inputInteresting"  name="interesting" class="form-control" required>
+                  <option value="">- - Scale 1-5 - -</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 my-1">
+                <label for="inputBR">Taking it as..?</label>
                 <select id="inputBR" name="br" class="form-control" required>
                   <option value="">Please select...</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
+                  <option value="true">Breath Requirement</option>
+                  <option value="false">Program Requirement</option>
                 </select>
               </div>
 
@@ -203,6 +217,7 @@
                 <p><%= "User: " + review.author%></p>
                 <p>Usefulness: <%= "★".repeat(review.useful_score) + "☆".repeat(5 - review.useful_score) %></p>
                 <p>Difficulty: <%= "★".repeat(review.difficulty_score) + "☆".repeat(5 - review.difficulty_score)  %></p>
+                <p>Interesting: <%= "★".repeat(review.interesting_score) + "☆".repeat(5 - review.interesting_score)  %></p>
               </div>
 
               <div class="col-md-9" >

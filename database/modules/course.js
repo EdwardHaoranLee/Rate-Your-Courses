@@ -25,5 +25,40 @@ var courseSchema = new mongoose.Schema({
     ]
 });
 
+courseSchema.methods.getUsefulness = function(){
+    var sumScore = 0;
+
+    var totalNumber = this.course_reviews.length;
+ 
+    if(totalNumber == 0){return "N/A"};
+    this.course_reviews.forEach( review => {
+        sumScore += review.useful_score;
+    })
+    return (sumScore / totalNumber).toFixed(1);
+  };
+
+  courseSchema.methods.getDifficulty = function(){
+    var sumScore = 0;
+
+    var totalNumber = this.course_reviews.length;
+
+    if(totalNumber == 0){return "N/A"};
+    this.course_reviews.forEach( review => {
+        sumScore += review.difficulty_score;
+    })
+    return (sumScore / totalNumber).toFixed(1);
+  };
+
+  courseSchema.methods.getInteresting = function(){
+    var sumScore = 0;
+
+    var totalNumber = this.course_reviews.length;
+  
+    if(totalNumber == 0){return "N/A"};
+    this.course_reviews.forEach( review => {
+        sumScore += review.interesting_score;
+    })
+    return (sumScore / totalNumber).toFixed(1);
+  };
 
 module.exports = mongoose.model("Course", courseSchema);
