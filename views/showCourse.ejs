@@ -3,16 +3,32 @@
 
 
     <div class="container mt-5">
-        <div class="row">
-            <!-- course name and score -->
-            <div class="col-md-5 col-12">
-              <div>
-                  <h1>Course: <%= course.code%></h1>
-                  <h4><%= course.name%></h4>
-      
-                  <h5>Usefulness: <%= course.getUsefulness()%></h5>
-                  <h5>Difficulties:<%= course.getDifficulty()%></h5>
-                  <h5>Interesting:<%= course.getInteresting()%></h5>
+      <div class="row" >
+        <!-- course name and score -->
+        <div class="col-md-5 col-12 ">
+        
+              <h2>Course: <%= course.code%> 
+                <span class="badge badge-pill badge-warning">BR <%= course.br_category%></span></h2>
+              <h3><%= course.name%></h3>
+
+              <div class="container mt-3" >
+                <div class="row  my-2">
+                  <div class="col-sm" style="padding:0">
+                    <h5>Usefulness: <%= course.getUsefulness()%></h5>
+                  </div>
+                  <div class="col-sm" style="padding:0"> 
+                    <h5>Difficulties:<%= course.getDifficulty()%></h5>
+                  </div>
+                </div>
+                <div class="row   my-2" >
+                  <div class="col-sm" style="padding:0">
+                    <h5>Interesting:<%= course.getInteresting()%></h5>
+                  </div>
+                  <div class="col-sm" style="padding:0"> 
+                    <h5>  </h5>
+                  </div>
+                </div>
+                <div class="row   my-2" >
                   <h5>
                     Sentiment Score: 
                     <% if (course.score == "None"){ %>
@@ -23,31 +39,41 @@
         
                     <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
                     title="What's that'?" 
-                    data-content="Sentiment score calculated using sentimental analysis based on thousands of relavent posts on UofT reddit ">
+                    data-content="Sentiment score is calculated using sentimental analysis based on thousands of relavent posts on UofT reddit. It reflects the level happiness when students taking this course. ">
                     ?</a>
                   </h5>
-
-                  <p>BR: <%= course.br_category%></p>
-              
-                  <p>Monthly viewed: <%= course.monthly_visit%></p>
-                  <p>
-                    Popularity:  <%= course.heat%>
-                    <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
-                    title="What's that?" 
-                    data-content="Popularity index is calculated based on # of related posts, replies, and upvotes on UofT reddit">
-                    ?</a>
-                  </p>
-            
+                </div>
+                <div class="row mt-2" >
+                  <div class="col-sm" style="padding:0">
+                    <p>Popularity:  <%= course.heat%>
+                      <a tabindex="0" class="btn btn-sm btn-outline-danger" role="button" data-toggle="popover" data-trigger="focus" 
+                      title="What's that?" 
+                      data-content="Popularity index is calculated based on # of related posts, replies, and upvotes on UofT reddit">
+                      ?</a>
+                    </p>
+                  </div>
+                  <div class="col-sm" style="padding:0"> 
+                    <p>Monthly Visit:<%= course.monthly_visit%></p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-md-7 col-12">
-              <img class="img-fluid" style="height:280px"src="<%= course.word_cloud %>">
-            </div>
+        
         </div>
-        <h5>Description:</h5>
-        <p><%= course.description%> </p>
-            
-        <hr>
+        <div class="col-md-7 col-12 align-self-center">
+          <img class="img-fluid" style="height:280px"src="<%= course.word_cloud %>">
+        </div>
+      </div>
+      <h5>Description:</h5>
+      <p><%= course.description%> </p>
+          
+      <hr>
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">We need your feedback!</h4>
+        <p>We want to present you with the best and accurate information! Help us improve the content by clicking 👍 or 👎.Right now this feature is <span class="font-weight-bold">non-reversible</span>, so please be extra careful when voting! Thank you!   </p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
         <!-- Reddit Comment list -->
         <div class="column mt-5">
@@ -127,9 +153,9 @@
     
         <div class=" p-4 mt-2 border bg-light">
 
-          <div class="border border-dange mb-2" style="height:5em">
-            <h2> Review from your classmates</h5>
-
+          <div class="border border-dange mb-3 p-3 bg-half-black" style="height:7em">
+            <h1 class="text-center" style="color:white"> User Uploaded Review</h1>
+            <p class="text-center" style="color:white"> Help this platform to grow by sharing your own course review!</p>
           </div>
 
     

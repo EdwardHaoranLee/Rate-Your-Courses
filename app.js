@@ -25,8 +25,9 @@ var nodemailer = require('nodemailer');
 // ===== CONNECT TO MONGO DB =====
 
 // var url = "mongodb://localhost/rateyourcourses"
-// var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
-var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/rateyourcourses100?retryWrites=true&w=majority";
+// var url_testing = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/ratemycourses?retryWrites=true&w=majority";
+var url = "mongodb+srv://admin:admin@cluster0.1cbyy.mongodb.net/rateyourcourses100retryWrites=true&w=majority";
+// var url123 = "mongodb+srv://admin:<password>@cluster0.1cbyy.mongodb.net/<dbname>?retryWrites=true&w=majority"
 
 mongoose.connect(url, {
         useNewUrlParser: true,
@@ -63,14 +64,6 @@ app.use(passport.session());
 app.locals.userLocation = '';
 app.locals.br= "all";
 app.locals.sortby= '';
-
-
-
-
-
-
-
-
 
 // ======= LOAD USER INFO ===
 app.use(function(req, res, next){
@@ -151,17 +144,15 @@ app.get("/feedback", function(req, res){
 		service: 'gmail',
 		auth: {
 		  user: 'jasminesun.ryc@gmail.com',
-		  pass: 'rateyourcourses'
+		  pass: process.env.RYC_EMAIL_PASSWORD,
 		}
 	  });
-	  
 	  var mailOptions = {
 		from: email,
 		to: 'jasminesun.ryc@gmail.com',
 		subject: '[RYC]Feedback from Users',
 		text: feedback
 	  };
-	  
 	  transporter.sendMail(mailOptions, function(error, info){
 		if (error) {
 		  console.log(error);
@@ -169,10 +160,9 @@ app.get("/feedback", function(req, res){
 		  console.log('Email sent: ' + info.response);
 		}
 	  });
-	
 	res.send("Thank you for you feedback! Hope you have a great day😊")
-
 });
+
 
 app.get("/course/:courseCode", function(req, res){
     var courseCode = req.params.courseCode;

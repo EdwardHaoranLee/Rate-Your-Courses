@@ -30,7 +30,7 @@ courseSchema.methods.getUsefulness = function(){
 
     var totalNumber = this.course_reviews.length;
  
-    if(totalNumber == 0){return "N/A"};
+    if(totalNumber == 0){return "n/a"};
     this.course_reviews.forEach( review => {
         sumScore += review.useful_score;
     })
@@ -42,7 +42,7 @@ courseSchema.methods.getUsefulness = function(){
 
     var totalNumber = this.course_reviews.length;
 
-    if(totalNumber == 0){return "N/A"};
+    if(totalNumber == 0){return "n/a"};
     this.course_reviews.forEach( review => {
         sumScore += review.difficulty_score;
     })
@@ -54,7 +54,7 @@ courseSchema.methods.getUsefulness = function(){
 
     var totalNumber = this.course_reviews.length;
   
-    if(totalNumber == 0){return "N/A"};
+    if(totalNumber == 0){return "n/a"};
     this.course_reviews.forEach( review => {
         sumScore += review.interesting_score;
     })
