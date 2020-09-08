@@ -46,7 +46,8 @@ The next step will be downloading the raw data from reddit. The Python library w
 
 After getting all the related information about reddit, we combine strings from the course complex. Using the long long string, we put into [nltk](https://www.nltk.org) library, a natural language toolkit, to filter unimportant words and only leave nouns and adjectives. Then we count the frequency of these words. With the frequency, we put them in [wordcloud](https://amueller.github.io/word_cloud/) library and generate a word cloud image.
 
-![Example WordCloud](wordcloud_example.png)
+![Example WordCloud](public/Wordcloud_image/CSC265.png)
+<center>Wordcloud for CSC265</center>
 
 ### Course score
 
