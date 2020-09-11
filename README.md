@@ -6,7 +6,7 @@ This project is started with the mission of helping undergraduate student in Uni
 
 This repository contains:
 1. The [algorithm Python file folder](CourseCloudFromReddit) where contains all the Python code to process the raw data from reddit.
-2. All the rest files are components of Node.js.
+2. All the rest files are components of web implementation.
 
 ## Table of Contents
 
@@ -17,10 +17,10 @@ This repository contains:
     - [Raw data from reddit](#raw-data-from-reddit)
     - [Word frequency and word cloud](word-frequency-and-word-cloud)
     - [Course score](#course-score)
-- [Webpage Implementation](#Webpage-implementation)
-    - Frontend:  Ejs, Bootstrap, CSS, Jquery, Ajax
-    - Backend: Node.js, Express.js, MongoDB, Mongoose
-    - Other technologies: Heroku(deployment), AWS(coming soon)
+- [Webpage Implementation](#Webpage-Implementation)
+    - [Technology stack](#Technology-Stack-Summary)
+    - [Authentication](#authentication)
+    - [CRUD API](#CRUD-API)
 
 ## Background
 
@@ -46,7 +46,7 @@ The next step will be downloading the raw data from reddit. The Python library w
 
 After getting all the related information about reddit, we combine strings from the course complex. Using the long long string, we put into [nltk](https://www.nltk.org) library, a natural language toolkit, to filter unimportant words and only leave nouns and adjectives. Then we count the frequency of these words. With the frequency, we put them in [wordcloud](https://amueller.github.io/word_cloud/) library and generate a word cloud image.
 
-![Example WordCloud](public/Wordcloud_image/CSC265.png)
+![WordCloud](public/Wordcloud_image/CSC265.png)
 
 ### Course score
 
@@ -54,4 +54,30 @@ To quantitively reflect how the students feel about the target course, we will m
 
 ## Webpage Implementation
 
-*(Coming soon)*
+### PC and mobile view
+
+![PC-view](public/pc_view.png)
+<img src="public/mobile_view.PNG" width="200">
+
+### Technology Stack Summary
+- Frontend:  Ejs, Bootstrap, CSS, Jquery, Ajax
+- Backend: Node.js, Express.js, MongoDB, Mongoose
+- Other technologies: Heroku, Google API
+
+### Authentication
+
+Two authentication strategies are implemented:  id/password login and Google login. For security consideration, Javascript library [PassportJS](http://www.passportjs.org/) is used to encrypt user's password before saving into the database.
+
+
+### Create, Read, Update, Delete
+
+The server is implemented with ExpressJS to handle request/response and web-page routing. Users can browse course review :
+- by entering the course code in the landing page
+- by visiting the all-courses page, with options to view by alphabet/popularity/sentiment score/monthly visit number
+
+After logged in, users may post reviews or upvote/downvote for contents scraped from Reddit.
+
+
+
+
+
